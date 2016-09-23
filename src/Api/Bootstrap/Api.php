@@ -258,7 +258,7 @@ class Api
     private function setUpErrorHandling()
     {
         \set_exception_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Api\Handler\Exception'), 'handle']);
-        \set_error_handler([\Maleficarum\Ioc\Container::geqt('Maleficarum\Api\Handler\Error'), 'handle']);
+        \set_error_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Api\Handler\Error'), 'handle']);
 
         return $this;
     }
