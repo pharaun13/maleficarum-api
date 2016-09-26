@@ -90,7 +90,7 @@ class Api
 
         /** DEFAULT Route: call the default controller to check for redirect SEO entries **/
         $app->notFound(function () {
-            \Maleficarum\Ioc\Container::get('Controller\Fallback')->__remap('notFound');
+            \Maleficarum\Ioc\Container::get('Maleficarum\Api\Controller\Fallback')->__remap('notFound');
         });
 
         return $this;
