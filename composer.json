@@ -26,7 +26,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:a-kowalski/component-ioc.git"
+            "url": "git@github.com:pharaun13/component-ioc.git"
         }
     ]
 }
