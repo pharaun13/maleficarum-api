@@ -7,6 +7,9 @@ namespace Maleficarum\Api\Request;
 
 class Request
 {
+    const METHOD_POST = 'POST';
+    const METHOD_GET = 'GET';
+
     /**
      * Internal storage for the delegation request object
      *
@@ -49,10 +52,11 @@ class Request
         // set data
         $this->setData([
             'url' => [],
-            'post' => $post,
-            'get' => $get
+            self::METHOD_POST => $post,
+            self::METHOD_GET => $get
         ]);
     }
+
     /**
      * Fetch a request param.
      *
@@ -66,10 +70,10 @@ class Request
         // try post data first
         if (isset($this->getData()['url'][$name])) {
             return $this->getData()['url'][$name];
-        } elseif (isset($this->getData()['post'][$name])) {
-            return $this->getData()['post'][$name];
-        } elseif (isset($this->getData()['get'][$name])) {
-            return $this->getData()['get'][$name];
+        } elseif (isset($this->getData()[self::METHOD_POST][$name])) {
+            return $this->getData()[self::METHOD_POST][$name];
+        } elseif (isset($this->getData()[self::METHOD_GET][$name])) {
+            return $this->getData()[self::METHOD_GET][$name];
         }
 
         return null;
@@ -135,6 +139,28 @@ class Request
     public function getHeader($name)
     {
         return $this->getRequestDelegation()->getHeader($name);
+    }
+
+    /**
+     * Fetch parameters of given method
+     * 
+     * @param string $method
+     * 
+     * @return array|null
+     */
+    public function getParameters($method = self::METHOD_GET)
+    {
+        $data = $this->getData();
+
+        if ($method === self::METHOD_GET && isset($data[self::METHOD_GET])) {
+            return $data[self::METHOD_GET];
+        }
+
+        if ($method === self::METHOD_POST && isset($data[self::METHOD_POST])) {
+            return $data[self::METHOD_POST];
+        }
+
+        return null;
     }
 
     /**
