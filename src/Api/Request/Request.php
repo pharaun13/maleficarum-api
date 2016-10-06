@@ -31,13 +31,22 @@ class Request
      * Initialize a new instance of the request object.
      *
      * @param \Phalcon\Http\Request $pr
+     * @throws \Maleficarum\Api\Exception\UnsupportedMediaTypeException
      */
     public function __construct(\Phalcon\Http\Request $pr)
     {
         // set delegations
         $this->setRequestDelegation($pr);
 
-        $parserClass = preg_match('/^application\/json/', $this->getHeader('Content-Type')) ? 'JsonParser' : 'UrlParser';
+        $contentType = $this->getHeader('Content-Type');
+
+        preg_match('/^application\/json/', $contentType) and $parserClass = 'JsonParser';
+        preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = 'UrlParser';
+
+        if (empty($parserClass)) {
+            throw new \Maleficarum\Api\Exception\UnsupportedMediaTypeException('Provided Content-Type is not supported. \Maleficarum\Api\Request\Http\Request::__construct()');
+        }
+
         /** @var \Maleficarum\Api\Request\Parser\AbstractParser $parser */
         $parser = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Request\Parser\\' . $parserClass, [$this->getRequestDelegation()]);
 

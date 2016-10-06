@@ -10,10 +10,6 @@ class UrlParser extends \Maleficarum\Api\Request\Parser\AbstractParser
      */
     public function parsePostData()
     {
-        if (!preg_match('/^application\/x-www-form-urlencoded/', $this->getRequest()->getHeader('Content-Type'))){
-            return [];
-        }
-
         // fetch request data from $_POST superglobal
         $data = (array)$this->getRequest()->getPost();
         $data = $this->sanitizeData($data);
