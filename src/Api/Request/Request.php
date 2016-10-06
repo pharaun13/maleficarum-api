@@ -37,23 +37,15 @@ class Request
         // set delegations
         $this->setRequestDelegation($pr);
 
-        // fetch request data from phalcon (json is handled in a different way that $_REQUEST)
-        $post = (array)$this->getRequestDelegation()->getJsonRawBody();
-        $get = (array)$this->getRequestDelegation()->getQuery();
-
-        // sanitize input
-        array_walk_recursive($post, function (&$item) {
-            is_string($item) and $item = trim(filter_var($item, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
-        });
-        array_walk_recursive($get, function (&$item) {
-            is_string($item) and $item = trim(filter_var($item, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
-        });
+        $parserClass = preg_match('/^application\/json/', $this->getHeader('Content-Type')) ? 'JsonParser' : 'UrlParser';
+        /** @var \Maleficarum\Api\Request\Parser\AbstractParser $parser */
+        $parser = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Request\Parser\\' . $parserClass, [$this->getRequestDelegation()]);
 
         // set data
         $this->setData([
             'url' => [],
-            self::METHOD_POST => $post,
-            self::METHOD_GET => $get
+            self::METHOD_POST => $parser->parsePostData(),
+            self::METHOD_GET => $parser->parseGetData()
         ]);
     }
 

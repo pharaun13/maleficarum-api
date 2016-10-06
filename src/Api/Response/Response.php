@@ -51,8 +51,7 @@ class Response
         $this->setResponseDelegation($resp);
 
         // initialize response values
-        $this->getResponseDelegation()
-            ->setStatusCode(200, \Maleficarum\Api\Response\Status::getMessageForStatus(200));
+        $this->getResponseDelegation()->setStatusCode(200, \Maleficarum\Api\Response\Status::getMessageForStatus(200));
     }
 
     /**
@@ -90,8 +89,7 @@ class Response
     public function output()
     {
         // add typical response headers
-        $this->getResponseDelegation()
-            ->setHeader('Content-Type', 'application/json');
+        $this->getResponseDelegation()->setHeader('Content-Type', 'application/json');
 
         // add time profiling data if available
         if (!is_null($this->getProfiler('time')) && isset($this->content['meta']) && $this->getProfiler('time')->isComplete()) {
