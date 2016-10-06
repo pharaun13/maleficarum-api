@@ -31,29 +31,30 @@ class Request
      * Initialize a new instance of the request object.
      *
      * @param \Phalcon\Http\Request $pr
+     * @throws \Maleficarum\Api\Exception\UnsupportedMediaTypeException
      */
     public function __construct(\Phalcon\Http\Request $pr)
     {
         // set delegations
         $this->setRequestDelegation($pr);
 
-        // fetch request data from phalcon (json is handled in a different way that $_REQUEST)
-        $post = (array)$this->getRequestDelegation()->getJsonRawBody();
-        $get = (array)$this->getRequestDelegation()->getQuery();
+        $contentType = $this->getHeader('Content-Type');
 
-        // sanitize input
-        array_walk_recursive($post, function (&$item) {
-            is_string($item) and $item = trim(filter_var($item, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
-        });
-        array_walk_recursive($get, function (&$item) {
-            is_string($item) and $item = trim(filter_var($item, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
-        });
+        preg_match('/^application\/json/', $contentType) and $parserClass = 'JsonParser';
+        preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = 'UrlParser';
+
+        if (empty($parserClass)) {
+            throw new \Maleficarum\Api\Exception\UnsupportedMediaTypeException('Provided Content-Type is not supported. \Maleficarum\Api\Request\Http\Request::__construct()');
+        }
+
+        /** @var \Maleficarum\Api\Request\Parser\AbstractParser $parser */
+        $parser = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Request\Parser\\' . $parserClass, [$this->getRequestDelegation()]);
 
         // set data
         $this->setData([
             'url' => [],
-            self::METHOD_POST => $post,
-            self::METHOD_GET => $get
+            self::METHOD_POST => $parser->parsePostData(),
+            self::METHOD_GET => $parser->parseGetData()
         ]);
     }
 

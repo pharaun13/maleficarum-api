@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [1.2.0] - 2016-10-06
+### Added
+- Added application/x-www-form-urlencoded request handling
+- Added exception for unsupported media type
+
 ## [1.1.0] - 2016-10-04
 ### Added
 - Added new method for fetching all GET or POST parameters
