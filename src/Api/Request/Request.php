@@ -38,10 +38,7 @@ class Request
         // set delegations
         $this->setRequestDelegation($pr);
 
-        $contentType = $this->getHeader('Content-Type');
-
-        preg_match('/^application\/json/', $contentType) and $parserClass = 'JsonParser';
-        preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = 'UrlParser';
+        $parserClass = $this->determineParser();
 
         if (empty($parserClass)) {
             throw new \Maleficarum\Api\Exception\UnsupportedMediaTypeException('Provided Content-Type is not supported. \Maleficarum\Api\Request\Http\Request::__construct()');
@@ -260,5 +257,21 @@ class Request
     private function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Determine request parser
+     *
+     * @return null|string
+     */
+    private function determineParser()
+    {
+        $contentType = $this->getHeader('Content-Type');
+        $parserClass = null;
+
+        empty($contentType) || preg_match('/^application\/json/', $contentType) and $parserClass = 'JsonParser';
+        preg_match('/^application\/x-www-form-urlencoded/', $contentType) and $parserClass = 'UrlParser';
+
+        return $parserClass;
     }
 }

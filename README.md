@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [1.2.1] - 2016-10-07
+### Fixed
+- Set default request parser if Content-Type is not defined
+
 ## [1.2.0] - 2016-10-06
 ### Added
 - Added application/x-www-form-urlencoded request handling
