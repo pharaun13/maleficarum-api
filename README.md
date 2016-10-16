@@ -1,6 +1,15 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [2.0.0] - 2016-10-16
+### Changed
+##### Move components listed below to the external repositories:
+- Config
+- Profiler
+- Environment
+- Request
+- Response
+
 ## [1.2.1] - 2016-10-07
 ### Fixed
 - Set default request parser if Content-Type is not defined
