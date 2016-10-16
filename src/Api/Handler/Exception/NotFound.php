@@ -9,11 +9,11 @@ namespace Maleficarum\Api\Handler\Exception;
 class NotFound
 {
     /**
-     * Use \Maleficarum\Api\Response\Http\Dependant functionality.
+     * Use \Maleficarum\Response\Http\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Response\Dependant;
+    use \Maleficarum\Response\Dependant;
 
     /**
      * NotFound exception handling functionality.
@@ -28,7 +28,7 @@ class NotFound
         if (!is_int($debugLevel)) throw new \InvalidArgumentException('Incorrect debug level - integer expected. \Maleficarum\Api\Handler\Exception\NotFound::handle()');
 
         // set response status
-        $this->getResponse()->setStatusCode(\Maleficarum\Api\Response\Status::STATUS_CODE_404);
+        $this->getResponse()->setStatusCode(\Maleficarum\Response\Status::STATUS_CODE_404);
 
         // handle response
         $this->handleJSON($e, $debugLevel);

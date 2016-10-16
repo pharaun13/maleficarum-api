@@ -8,11 +8,11 @@ namespace Maleficarum\Api\Handler\Exception;
 class Generic
 {
     /**
-     * Use \Maleficarum\Api\Response\Dependant functionality.
+     * Use \Maleficarum\Response\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Response\Dependant;
+    use \Maleficarum\Response\Dependant;
 
     /**
      * Generic exception handling functionality. This handler will be called if there is no type
@@ -37,7 +37,7 @@ class Generic
             $this->handleGeneric($e, $debugLevel);
         } else {
             // set response status
-            $this->getResponse()->setStatusCode(\Maleficarum\Api\Response\Status::STATUS_CODE_500);
+            $this->getResponse()->setStatusCode(\Maleficarum\Response\Status::STATUS_CODE_500);
 
             // handle response
             $this->handleJSON($e, $debugLevel);

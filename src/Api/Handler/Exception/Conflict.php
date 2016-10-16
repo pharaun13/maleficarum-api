@@ -8,11 +8,11 @@ namespace Maleficarum\Api\Handler\Exception;
 class Conflict
 {
     /**
-     * Use \Maleficarum\Api\Response\Http\Dependant functionality.
+     * Use \Maleficarum\Response\Http\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Response\Dependant;
+    use \Maleficarum\Response\Dependant;
 
     /**
      * Authentication exception handling functionality.
@@ -27,7 +27,7 @@ class Conflict
         if (!is_int($debugLevel)) throw new \InvalidArgumentException('Incorrect debug level - integer expected. \Maleficarum\Api\Handler\Exception\Conflict::handle()');
 
         // set response status
-        $this->getResponse()->setStatusCode(\Maleficarum\Api\Response\Status::STATUS_CODE_409);
+        $this->getResponse()->setStatusCode(\Maleficarum\Response\Status::STATUS_CODE_409);
 
         // handle response
         $this->handleJSON($e, $debugLevel);

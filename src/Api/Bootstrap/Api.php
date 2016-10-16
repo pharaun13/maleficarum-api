@@ -10,35 +10,35 @@ class Api
     /**
      * Internal storage for the config object
      *
-     * @var \Maleficarum\Api\Config\AbstractConfig|null
+     * @var \Maleficarum\Config\AbstractConfig|null
      */
     private $config = null;
 
     /**
      * Internal storage for the time profiler
      *
-     * @var \Maleficarum\Api\Profiler\Time|null
+     * @var \Maleficarum\Profiler\Time|null
      */
     private $timeProfiler = null;
 
     /**
      * Internal storage for the database profiler
      *
-     * @var \Maleficarum\Api\Profiler\Database|null
+     * @var \Maleficarum\Profiler\Database|null
      */
     private $dbProfiler = null;
 
     /**
      * Internal storage for the request object
      *
-     * @var \Maleficarum\Api\Request\Request
+     * @var \Maleficarum\Request\Request
      */
     private $request = null;
 
     /**
      * Internal storage for the response object
      *
-     * @var \Maleficarum\Api\Response\Response
+     * @var \Maleficarum\Response\Response
      */
     private $response = null;
 
@@ -105,7 +105,7 @@ class Api
     {
         /** @var \Maleficarum\Api\Database\Manager $shards */
         $shards = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Database\Manager');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\Database', $shards);
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Database', $shards);
 
         !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('db_init', 'Database shard manager initialized.');
 
@@ -121,7 +121,7 @@ class Api
     {
         /** @var \Maleficarum\Api\Rabbitmq\Connection $rabbitConnection */
         $rabbitConnection = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Rabbitmq\Connection');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\CommandQueue', $rabbitConnection);
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\CommandQueue', $rabbitConnection);
 
         !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('queue_init', 'RabbitMQ broker connection initialized.');
 
@@ -151,8 +151,8 @@ class Api
      */
     private function setUpResponse()
     {
-        $this->response = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Response\Response');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\Response', $this->response);
+        $this->response = \Maleficarum\Ioc\Container::get('Maleficarum\Response\Response');
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Response', $this->response);
 
         !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('response_init', 'Response initialized.');
 
@@ -166,8 +166,8 @@ class Api
      */
     private function setUpRequest()
     {
-        $this->request = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Request\Request');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\Request', $this->request);
+        $this->request = \Maleficarum\Ioc\Container::get('Maleficarum\Request\Request');
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Request', $this->request);
 
         !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('request_init', 'Request initialized.');
 
@@ -182,8 +182,8 @@ class Api
      */
     private function setUpConfig()
     {
-        $this->config = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Config\Ini\Config', ['id' => 'config.ini']);
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\Config', $this->config);
+        $this->config = \Maleficarum\Ioc\Container::get('Maleficarum\Config\Ini\Config', ['id' => 'config.ini']);
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Config', $this->config);
 
         // check the disabled/enabled switch
         if (!isset($this->config['global']['enabled']) || (!$this->config['global']['enabled'])) throw new \RuntimeException('Application disabled! \Maleficarum\Api\Bootstrap\Api::setUpConfig()');
@@ -201,9 +201,9 @@ class Api
      */
     private function setUpEnvironment()
     {
-        /* @var $env \Maleficarum\Api\Environment\Server */
-        $env = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Environment\Server');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\Environment', $env);
+        /* @var $env \Maleficarum\Environment\Server */
+        $env = \Maleficarum\Ioc\Container::get('Maleficarum\Environment\Server');
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Environment', $env);
 
         // fetch current env
         $env = $env->getCurrentEnvironment();
@@ -239,11 +239,11 @@ class Api
      */
     private function setUpProfilers($start = null)
     {
-        $this->timeProfiler = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Profiler\Time')->begin($start);
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\Profiler\Time', $this->timeProfiler);
+        $this->timeProfiler = \Maleficarum\Ioc\Container::get('Maleficarum\Profiler\Time')->begin($start);
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Profiler\Time', $this->timeProfiler);
 
-        $this->dbProfiler = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Profiler\Database');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Api\Profiler\Database', $this->dbProfiler);
+        $this->dbProfiler = \Maleficarum\Ioc\Container::get('Maleficarum\Profiler\Database');
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Profiler\Database', $this->dbProfiler);
 
         $this->timeProfiler->addMilestone('profiler_init', 'All profilers initialized.');
 

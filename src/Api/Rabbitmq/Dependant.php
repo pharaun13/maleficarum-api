@@ -1,6 +1,6 @@
 <?php
 /**
- * This trait provides functionality common to all classes dependant on the \Maleficarum\Api\Config namespace
+ * This trait provides functionality common to all classes dependant on the \Maleficarum\Config namespace
  */
 
 namespace Maleficarum\Api\Rabbitmq;

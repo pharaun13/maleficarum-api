@@ -8,11 +8,11 @@ namespace Maleficarum\Api\Rabbitmq;
 class Connection
 {
     /**
-     * Use \Maleficarum\Api\Config\Dependant functionality.
+     * Use \Maleficarum\Config\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Config\Dependant;
+    use \Maleficarum\Config\Dependant;
 
     /**
      * Internal storege for a AMPQ connection object.

@@ -8,11 +8,11 @@ namespace Maleficarum\Api\Handler\Exception;
 class UnsupportedMediaType
 {
     /**
-     * Use \Maleficarum\Api\Response\Http\Dependant functionality.
+     * Use \Maleficarum\Response\Http\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Response\Dependant;
+    use \Maleficarum\Response\Dependant;
 
     /**
      * UnsupportedMediaType exception handling functionality.
@@ -31,7 +31,7 @@ class UnsupportedMediaType
             $this->handleGeneric($e, $debugLevel);
         } else {
             // set response status
-            $this->getResponse()->setStatusCode(\Maleficarum\Api\Response\Status::STATUS_CODE_415);
+            $this->getResponse()->setStatusCode(\Maleficarum\Response\Status::STATUS_CODE_415);
 
             // handle response
             $this->handleJSON($e, $debugLevel);

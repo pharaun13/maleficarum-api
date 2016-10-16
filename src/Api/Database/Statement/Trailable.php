@@ -26,7 +26,7 @@ class Trailable extends \PDOStatement
     /**
      * Internal storage for a database profiler to use when executing queries.
      *
-     * @var \Maleficarum\Api\Profiler\Database|null
+     * @var \Maleficarum\Profiler\Database|null
      */
     protected $profiler = null;
 
@@ -41,9 +41,9 @@ class Trailable extends \PDOStatement
      * Initialize a new Statement instance and allow for trailer injection.
      *
      * @param \Maleficarum\Api\Database\PDO\Trailable $pdo
-     * @param \Maleficarum\Api\Profiler\Database|null $profiler
+     * @param \Maleficarum\Profiler\Database|null $profiler
      */
-    protected function __construct(\Maleficarum\Api\Database\PDO\Trailable $pdo, \Maleficarum\Api\Profiler\Database $profiler = null)
+    protected function __construct(\Maleficarum\Api\Database\PDO\Trailable $pdo, \Maleficarum\Profiler\Database $profiler = null)
     {
         $this->pdo = $pdo;
         $this->profiler = $profiler;

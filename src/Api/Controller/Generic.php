@@ -12,25 +12,25 @@ namespace Maleficarum\Api\Controller;
 abstract class Generic
 {
     /**
-     * Use \Maleficarum\Api\Config\Dependant functionality.
+     * Use \Maleficarum\Config\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Config\Dependant;
+    use \Maleficarum\Config\Dependant;
 
     /**
-     * Use \Maleficarum\Api\Environment\Dependant functionality.
+     * Use \Maleficarum\Environment\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Environment\Dependant;
+    use \Maleficarum\Environment\Dependant;
 
     /**
-     * Use \Maleficarum\Api\Profiler\Dependant functionality.
+     * Use \Maleficarum\Profiler\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Profiler\Dependant;
+    use \Maleficarum\Profiler\Dependant;
 
     /**
      * Use \Maleficarum\Api\Rabbitmq\Dependant functionality.
@@ -40,18 +40,18 @@ abstract class Generic
     use \Maleficarum\Api\Rabbitmq\Dependant;
 
     /**
-     * Use \Maleficarum\Api\Request\Dependant functionality.
+     * Use \Maleficarum\Request\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Request\Dependant;
+    use \Maleficarum\Request\Dependant;
 
     /**
-     * Use \Maleficarum\Api\Response\Dependant functionality.
+     * Use \Maleficarum\Response\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Response\Dependant;
+    use \Maleficarum\Response\Dependant;
 
     /**
      * Perform URL to class method remapping.

@@ -41,7 +41,7 @@ class GenericTest extends \Maleficarum\Api\Test\ApiTestCase {
 		$exception = \Maleficarum\Ioc\Container::get('Exception');
 
 		// set up a response mock
-		$resp = $this->getMockBuilder('Maleficarum\Api\Response\Response')->disableOriginalConstructor()->setMethods(['setStatusCode'])->getMock();
+		$resp = $this->getMockBuilder('Maleficarum\Response\Response')->disableOriginalConstructor()->setMethods(['setStatusCode'])->getMock();
 		$resp
 			->expects($this->once())
 			->method('setStatusCode')

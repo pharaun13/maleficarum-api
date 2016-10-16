@@ -8,11 +8,11 @@ namespace Maleficarum\Api\Security;
 class Manager
 {
     /**
-     * Use \Maleficarum\Api\Config\Dependant functionality.
+     * Use \Maleficarum\Config\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Config\Dependant;
+    use \Maleficarum\Config\Dependant;
 
     /**
      * Execute all security checks.

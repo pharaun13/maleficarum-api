@@ -8,11 +8,11 @@ namespace Maleficarum\Api\Handler\Exception;
 class BadRequest
 {
     /**
-     * Use \Maleficarum\Api\Response\Dependant functionality.
+     * Use \Maleficarum\Response\Dependant functionality.
      *
      * @trait
      */
-    use \Maleficarum\Api\Response\Dependant;
+    use \Maleficarum\Response\Dependant;
 
     /**
      * Authentication exception handling functionality.
@@ -27,7 +27,7 @@ class BadRequest
         if (!is_int($debugLevel)) throw new \InvalidArgumentException('Incorrect debug level - integer expected. \Maleficarum\Api\Handler\Exception\BadRequest::handle()');
 
         // set response status
-        $this->getResponse()->setStatusCode(\Maleficarum\Api\Response\Status::STATUS_CODE_400);
+        $this->getResponse()->setStatusCode(\Maleficarum\Response\Status::STATUS_CODE_400);
 
         // handle response
         $this->handleJSON($e, $debugLevel);
