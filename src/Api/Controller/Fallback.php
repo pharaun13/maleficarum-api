@@ -12,6 +12,6 @@ class Fallback extends \Maleficarum\Api\Controller\Generic {
 	 * @see \Core\Controller\Api\Generic._remap()
 	 */
 	public function _remap($method) {
-		throw new \Maleficarum\Api\Exception\NotFoundException('404 - not found.');
+		throw new \Maleficarum\Exception\NotFoundException('404 - not found.');
 	}
 }

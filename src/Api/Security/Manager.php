@@ -18,7 +18,7 @@ class Manager
      * Execute all security checks.
      *
      * @return \Maleficarum\Api\Security\Manager
-     * @throws \Maleficarum\Api\Exception\SecurityException
+     * @throws \Maleficarum\Exception\SecurityException
      * @throws \RuntimeException
      */
     public function verify()
@@ -35,7 +35,7 @@ class Manager
             if (!($check instanceof \Maleficarum\Api\Security\Check\AbstractCheck)) throw new \RuntimeException('Invalid security check object. \Maleficarum\Api\Security\Manager::verify()');
 
             // execute check object
-            if (!$check->execute()) throw new \Maleficarum\Api\Exception\SecurityException('Security check failed (' . get_class($check) . ').');
+            if (!$check->execute()) throw new \Maleficarum\Exception\SecurityException('Security check failed (' . get_class($check) . ').');
         }
 
         return $this;

@@ -59,7 +59,7 @@ abstract class Generic
      * @param string $method
      *
      * @return bool
-     * @throws \Maleficarum\Api\Exception\NotFoundException
+     * @throws \Maleficarum\Exception\NotFoundException
      */
     public function __remap($method)
     {
@@ -68,7 +68,7 @@ abstract class Generic
         if (method_exists($this, $action)) {
             $this->{$action}();
         } else {
-            throw new \Maleficarum\Api\Exception\NotFoundException('404 - page not found.');
+            throw new \Maleficarum\Exception\NotFoundException('404 - page not found.');
         }
 
         return true;
@@ -79,11 +79,11 @@ abstract class Generic
      *
      * @param array $errors
      *
-     * @throws \Maleficarum\Api\Exception\BadRequestException
+     * @throws \Maleficarum\Exception\BadRequestException
      */
     protected function respondToBadRequest(array $errors = [])
     {
-        throw (new \Maleficarum\Api\Exception\BadRequestException())->setErrors($errors);
+        throw (new \Maleficarum\Exception\BadRequestException())->setErrors($errors);
     }
 
     /**
@@ -91,10 +91,10 @@ abstract class Generic
      *
      * @param array $errors
      *
-     * @throws \Maleficarum\Api\Exception\ConflictException
+     * @throws \Maleficarum\Exception\ConflictException
      */
     protected function respondToConflict(array $errors = [])
     {
-        throw (new \Maleficarum\Api\Exception\ConflictException())->setErrors($errors);
+        throw (new \Maleficarum\Exception\ConflictException())->setErrors($errors);
     }
 }

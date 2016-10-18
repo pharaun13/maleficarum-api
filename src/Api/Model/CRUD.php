@@ -18,7 +18,7 @@ interface CRUD
      * Refresh this model with current data from the storage
      *
      * @return $this
-     * @throws \Maleficarum\Api\Exception\NotFoundException
+     * @throws \Maleficarum\Exception\NotFoundException
      */
     public function read();
 

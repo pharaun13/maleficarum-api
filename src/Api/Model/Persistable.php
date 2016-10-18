@@ -117,7 +117,7 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
         // bind query params
         self::$st[static::class . '::' . __FUNCTION__]->bindValue(":id", $this->getId());
         if (!self::$st[static::class . '::' . __FUNCTION__]->execute($this->getTable(), $this->getShardRoute()) || self::$st[static::class . '::' . __FUNCTION__]->rowCount() !== 1) {
-            throw new \Maleficarum\Api\Exception\NotFoundException('No entity found - ID: ' . $this->getId() . '. ' . static::class . '::read()');
+            throw new \Maleficarum\Exception\NotFoundException('No entity found - ID: ' . $this->getId() . '. ' . static::class . '::read()');
         }
 
         // fetch results and merge them into this object

@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [3.0.0] - 2016-10-18
+### Changed
+- Move handler and exception components to the external repository
+
 ## [2.0.0] - 2016-10-16
 ### Changed
 ##### Move components listed below to the external repositories:
