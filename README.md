@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [3.1.1] - 2016-10-21
+### Added
+- Added trait for logger
+
 ## [3.1.0] - 2016-10-21
 ### Added
 - Added monolog logger
