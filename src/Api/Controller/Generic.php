@@ -104,4 +104,16 @@ abstract class Generic
     {
         throw (new \Maleficarum\Exception\ConflictException())->setErrors($errors);
     }
+
+    /**
+     * Immediately halt all actions and send a 404 Not found response.
+     *
+     * @param string $message
+     *
+     * @throws \Maleficarum\Exception\NotFoundException
+     */
+    protected function respondToNotFound($message)
+    {
+        throw new \Maleficarum\Exception\NotFoundException($message);
+    }
 }
