@@ -68,9 +68,9 @@ class Api
             ->setUpRequest()
             ->setUpResponse()
             ->setUpLogger()
-            ->setUpSecurity()
             ->setUpQueue()
             ->setUpDatabase()
+            ->setUpSecurity()
             ->setUpRoutes($app, $routesPath);
     }
 

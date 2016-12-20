@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [3.2.1] - 2016-12-20
+### Added
+- Move security check after database initialization
+
 ## [3.2.0] - 2016-10-24
 ### Added
 - Add sending not found response via controller method
