@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [3.2.2] - 2016-12-22
+### Added
+- Add security checks skipping for specified routes
+
 ## [3.2.1] - 2016-12-20
 ### Changed
 - Move security check after database initialization
