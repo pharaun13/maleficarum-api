@@ -3,9 +3,9 @@
  * This class manages all bootstrap operations for the application.
  */
 
-namespace Maleficarum\Api\Bootstrap;
+namespace Maleficarum\Api;
 
-class Api
+class Bootstrap
 {
     /**
      * Internal storage for the config object
@@ -49,7 +49,7 @@ class Api
      */
     private $logger = null;
 
-    /* ------------------------------------ Api methods START ------------------------------------------ */
+    /* ------------------------------------ Bootstrap methods START ------------------------------------ */
     /**
      * Perform full api init.
      *
@@ -57,7 +57,7 @@ class Api
      * @param string $routesPath
      * @param int|float $start
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     public function init(\Phalcon\Mvc\Micro $app, $routesPath, $start = 0) {
         return $this
@@ -77,7 +77,7 @@ class Api
     /**
      * Perform any final maintenance actions. This will be called at the end of a request.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     public function conclude() {
         // complete profiling
@@ -93,7 +93,7 @@ class Api
     /**
      * Bootstrap step method - set up error/exception handling.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpErrorHandling() {
         \set_exception_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ExceptionHandler'), 'handle']);
@@ -105,7 +105,7 @@ class Api
     /**
      * Bootstrap step method - set up logger object.
      * 
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpLogger() {
         $this->logger = \Maleficarum\Ioc\Container::get('Monolog\Logger');
@@ -121,7 +121,7 @@ class Api
      *
      * @param float|null $start
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpProfilers($start = null) {
         $this->timeProfiler = \Maleficarum\Ioc\Container::get('Maleficarum\Profiler\Time')->begin($start);
@@ -138,7 +138,7 @@ class Api
     /**
      * Bootstrap step method - detect application environment.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      * @throws \RuntimeException
      */
     private function setUpEnvironment() {
@@ -160,7 +160,7 @@ class Api
             \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_CRUCIAL);
             ini_set('display_errors', '0');
         } else {
-            throw new \RuntimeException('Unrecognised environment. \Maleficarum\Api\Bootstrap\Api::setUpEnvironment()');
+            throw new \RuntimeException('Unrecognised environment. \Maleficarum\Api\Bootstrap::setUpEnvironment()');
         }
 
         // error reporting is to be enabled on all envs (non-dev ones will have errors logged into syslog)
@@ -174,7 +174,7 @@ class Api
     /**
      * Bootstrap step method - prepare, load and register the config object.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      * @throws \RuntimeException
      */
     private function setUpConfig() {
@@ -182,7 +182,7 @@ class Api
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Config', $this->config);
 
         // check the disabled/enabled switch
-        if (!isset($this->config['global']['enabled']) || (!$this->config['global']['enabled'])) throw new \RuntimeException('Application disabled! \Maleficarum\Api\Bootstrap\Api::setUpConfig()');
+        if (!isset($this->config['global']['enabled']) || (!$this->config['global']['enabled'])) throw new \RuntimeException('Application disabled! \Maleficarum\Api\Bootstrap::setUpConfig()');
 
         !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('conf_init', 'Config initialized.');
 
@@ -192,7 +192,7 @@ class Api
     /**
      * Bootstrap step method - prepare and register the request object.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpRequest() {
         $this->request = \Maleficarum\Ioc\Container::get('Maleficarum\Request\Request');
@@ -206,7 +206,7 @@ class Api
     /**
      * Bootstrap step method - prepare and register the response object.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpResponse() {
         $this->response = \Maleficarum\Ioc\Container::get('Maleficarum\Response\Response');
@@ -220,7 +220,7 @@ class Api
     /**
      * Bootstrap step method - prepare and register the security object.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpSecurity() {
         /** @var \Maleficarum\Api\Security\Manager $security */
@@ -235,14 +235,16 @@ class Api
     /**
      * Bootstrap step method - prepare and register the command queue connection object.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpQueue() {
-        /** @var \Maleficarum\Api\Rabbitmq\Connection $rabbitConnection */
-        $rabbitConnection = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Rabbitmq\Connection');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\CommandQueue', $rabbitConnection);
+        if (\Maleficarum\Ioc\Container::isRegistered('Maleficarum\Rabbitmq\Connection')) {
+            /** @var \Maleficarum\Rabbitmq\Connection $rabbitConnection */
+            $rabbitConnection = \Maleficarum\Ioc\Container::get('Maleficarum\Rabbitmq\Connection');
+            \Maleficarum\Ioc\Container::registerDependency('Maleficarum\CommandQueue', $rabbitConnection);
 
-        !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('queue_init', 'RabbitMQ broker connection initialized.');
+            !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('queue_init', 'RabbitMQ broker connection initialized.');
+        }
 
         return $this;
     }
@@ -250,7 +252,7 @@ class Api
     /**
      * Bootstrap step method - prepare and register database shard manager.
      *
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpDatabase() {
         /** @var \Maleficarum\Api\Database\Manager $shards */
@@ -269,13 +271,18 @@ class Api
      * @param string $routesPath
      *
      * @throws \Maleficarum\Exception\NotFoundException
-     * @return \Maleficarum\Api\Bootstrap\Api
+     * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpRoutes(\Phalcon\Mvc\Micro $app, $routesPath) {
         // include outside routes
         $route = explode('?', strtolower($this->request->getURI()))[0];
         $route = explode('/', preg_replace('/^\//', '', $route));
         $route = ucfirst(array_shift($route));
+
+        // set route filename for root path
+        if (0 === mb_strlen($route)) {
+            $route = 'Generic';
+        }
 
         $path = $routesPath . DIRECTORY_SEPARATOR . $route . '.php';
         if (is_readable($path)) {
@@ -290,5 +297,5 @@ class Api
 
         return $this;
     }
-    /* ------------------------------------ Api methods END -------------------------------------------- */
+    /* ------------------------------------ Bootstrap methods END -------------------------------------- */
 }

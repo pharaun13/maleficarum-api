@@ -1,6 +1,14 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [4.0.0] - 2017-01-10
+### Changed
+##### Move components listed below to the external repositories:
+- Worker
+- RabbitMQ
+### Fixed
+- Set default route filename for root path
+
 ## [3.2.2] - 2016-12-22
 ### Added
 - Add security checks skipping for specified routes

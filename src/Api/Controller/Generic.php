@@ -33,13 +33,6 @@ abstract class Generic
     use \Maleficarum\Profiler\Dependant;
 
     /**
-     * Use \Maleficarum\Api\Rabbitmq\Dependant functionality.
-     *
-     * @trait
-     */
-    use \Maleficarum\Api\Rabbitmq\Dependant;
-
-    /**
      * Use \Maleficarum\Request\Dependant functionality.
      *
      * @trait

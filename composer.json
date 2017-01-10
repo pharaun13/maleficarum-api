@@ -3,11 +3,9 @@
     "description": "API component",
     "require": {
         "php": ">=5.6",
-        "ext-json": "*",
         "ext-mbstring": "*",
         "ext-PDO": "*",
         "ext-phalcon": ">=3.0",
-        "php-amqplib/php-amqplib": "2.6.3",
         "maleficarum/ioc": "^1.0",
         "maleficarum/environment": "^1.0",
         "maleficarum/config": "^1.0",
