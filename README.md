@@ -6,6 +6,7 @@ This is the Maleficarum API component implementation.
 ##### Move components listed below to the external repositories:
 - Worker
 - RabbitMQ
+
 ### Fixed
 - Set default route filename for root path
 
