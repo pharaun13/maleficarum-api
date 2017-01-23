@@ -23,13 +23,12 @@ class Manager
 
     /**
      * Execute all security checks.
-     *
+     * 
      * @return \Maleficarum\Api\Security\Manager
-     * @throws \Maleficarum\Exception\SecurityException
      * @throws \RuntimeException
+     * @throws \Maleficarum\Exception\SecurityException
      */
-    public function verify()
-    {
+    public function verify() : \Maleficarum\Api\Security\Manager {
         // Check if any checks have been specified. If not the security manager returns a success.
         if (!is_array($this->getConfig()['security'])) return $this;
         if (!is_array($this->getConfig()['security']['checks']) || !count($this->getConfig()['security']['checks'])) return $this;
@@ -54,7 +53,7 @@ class Manager
      *
      * @return bool
      */
-    private function isSkippableRoute() {
+    private function isSkippableRoute() : bool {
         if (is_null($this->getRequest())) {
             return false;
         }

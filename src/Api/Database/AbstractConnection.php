@@ -62,27 +62,26 @@ abstract class AbstractConnection
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      */
-    public function __call($name, $args)
-    {
+    public function __call(string $name, array $args) {
         if (is_null($this->connection)) {
-            throw new \RuntimeException(sprintf('Cannot execute DB methods prior to establishing a connection. \%s::_call()', get_class($this)));
+            throw new \RuntimeException(sprintf('Cannot execute DB methods prior to establishing a connection. \%s::_call()', static::class));
         }
 
         if (!method_exists($this->connection, $name)) {
-            throw new \InvalidArgumentException(sprintf('Method %s unsupported by PDO. \%s::_call()', $name, get_class($this)));
+            throw new \InvalidArgumentException(sprintf('Method %s unsupported by PDO. \%s::_call()', $name, static::class));
         }
 
         return call_user_func_array([$this->connection, $name], $args);
     }
     /* ------------------------------------ Magic methods END ------------------------------------------ */
 
+    /* ------------------------------------ AbstractConnection methods START --------------------------- */
     /**
      * Connect this instance to a database engine.
-     *
-     * @return $this
+     * 
+     * @return \Maleficarum\Api\Database\AbstractConnection
      */
-    public function connect()
-    {
+    public function connect() : \Maleficarum\Api\Database\AbstractConnection {
         $this->connection = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Database\PDO\Trailable', ['dsn' => $this->getDSN()]);
 
         return $this;
@@ -93,157 +92,10 @@ abstract class AbstractConnection
      *
      * @returns bool
      */
-    public function isConnected()
-    {
+    public function isConnected() : bool {
         return !is_null($this->connection);
     }
-
-    /* ------------------------------------ Setters & Getters START ------------------------------------ */
-    /**
-     * Getter.
-     *
-     * @returns string
-     */
-    public function getHost()
-    {
-        return $this->host;
-    }
-
-    /**
-     * Setter.
-     *
-     * @param string $host
-     *
-     * @throws \InvalidArgumentException
-     * @return $this
-     */
-    public function setHost($host)
-    {
-        if (!is_string($host)) {
-            throw new \InvalidArgumentException(sprintf('Incorrect host provided - string expected. \%s::setHost()', get_class($this)));
-        }
-
-        $this->host = $host;
-
-        return $this;
-    }
-
-    /**
-     * Getter.
-     *
-     * @returns integer
-     */
-    public function getPort()
-    {
-        return $this->port;
-    }
-
-    /**
-     * Setter.
-     *
-     * @param string $port
-     *
-     * @throws \InvalidArgumentException
-     * @return $this
-     */
-    public function setPort($port)
-    {
-        if (!is_int($port)) {
-            throw new \InvalidArgumentException(sprintf('Incorrect port provided - integer expected. \%s::setPort()', get_class($this)));
-        }
-
-        $this->port = $port;
-
-        return $this;
-    }
-
-    /**
-     * Getter.
-     *
-     * @returns string
-     */
-    public function getDbname()
-    {
-        return $this->dbname;
-    }
-
-    /**
-     * Setter.
-     *
-     * @param string $dbname
-     *
-     * @throws \InvalidArgumentException
-     * @return $this
-     */
-    public function setDbname($dbname)
-    {
-        if (!is_string($dbname)) {
-            throw new \InvalidArgumentException(sprintf('Incorrect dbname provided - string expected. \%s::setDbname()', get_class($this)));
-        }
-
-        $this->dbname = $dbname;
-
-        return $this;
-    }
-
-    /**
-     * Getter.
-     *
-     * @returns string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * Setter.
-     *
-     * @param string $username
-     *
-     * @throws \InvalidArgumentException
-     * @return $this
-     */
-    public function setUsername($username)
-    {
-        if (!is_string($username)) {
-            throw new \InvalidArgumentException(sprintf('Incorrect username provided - string expected. \%s::setUsername()', get_class($this)));
-        }
-
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Getter.
-     *
-     * @returns string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Setter.
-     *
-     * @param string $password
-     *
-     * @throws \InvalidArgumentException
-     * @return $this
-     */
-    public function setPassword($password)
-    {
-        if (!is_string($password)) {
-            throw new \InvalidArgumentException(sprintf('Incorrect password provided - string expected. \%s::setPassword()', get_class($this)));
-        }
-
-        $this->password = $password;
-
-        return $this;
-    }
-    /* ------------------------------------ Setters & Getters END -------------------------------------- */
+    /* ------------------------------------ AbstractConnection methods END ----------------------------- */
 
     /* ------------------------------------ Abstract methods START ------------------------------------- */
     /**
@@ -251,7 +103,7 @@ abstract class AbstractConnection
      *
      * @return string
      */
-    abstract protected function getDSN();
+    abstract protected function getDSN() : string;
 
     /**
      * Lock the specified table.
@@ -259,8 +111,120 @@ abstract class AbstractConnection
      * @param string $table
      * @param string $mode
      *
-     * @return $this
+     * @return \Maleficarum\Api\Database\AbstractConnection
      */
-    abstract protected function lockTable($table, $mode = 'ACCESS EXCLUSIVE');
+    abstract protected function lockTable(string $table, string $mode = 'ACCESS EXCLUSIVE') : \Maleficarum\Api\Database\AbstractConnection;
     /* ------------------------------------ Abstract methods END --------------------------------------- */
+
+    /* ------------------------------------ Setters & Getters START ------------------------------------ */
+    /**
+     * Gets host
+     * 
+     * @return null|string
+     */
+    public function getHost() {
+        return $this->host;
+    }
+
+    /**
+     * Sets host
+     * 
+     * @param string $host
+     *
+     * @return \Maleficarum\Api\Database\AbstractConnection
+     */
+    public function setHost(string $host) : \Maleficarum\Api\Database\AbstractConnection {
+        $this->host = $host;
+
+        return $this;
+    }
+
+    /**
+     * Gets port
+     * 
+     * @return int|null
+     */
+    public function getPort() {
+        return $this->port;
+    }
+
+    /**
+     * Sets port
+     * 
+     * @param int $port
+     *
+     * @return \Maleficarum\Api\Database\AbstractConnection
+     */
+    public function setPort(int $port) : \Maleficarum\Api\Database\AbstractConnection {
+        $this->port = $port;
+
+        return $this;
+    }
+
+    /**
+     * Gets database name
+     * 
+     * @return null|string
+     */
+    public function getDbname() {
+        return $this->dbname;
+    }
+
+    /**
+     * Sets database name
+     * 
+     * @param string $dbname
+     *
+     * @return \Maleficarum\Api\Database\AbstractConnection
+     */
+    public function setDbname(string $dbname) : \Maleficarum\Api\Database\AbstractConnection {
+        $this->dbname = $dbname;
+
+        return $this;
+    }
+
+    /**
+     * Gets username
+     * 
+     * @return null|string
+     */
+    public function getUsername() {
+        return $this->username;
+    }
+
+    /**
+     * Sets username
+     * 
+     * @param string $username
+     *
+     * @return \Maleficarum\Api\Database\AbstractConnection
+     */
+    public function setUsername(string $username) : \Maleficarum\Api\Database\AbstractConnection {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Gets password
+     * 
+     * @return null|string
+     */
+    public function getPassword() {
+        return $this->password;
+    }
+
+    /**
+     * Sets password
+     * 
+     * @param string $password
+     *
+     * @return \Maleficarum\Api\Database\AbstractConnection
+     */
+    public function setPassword(string $password) : \Maleficarum\Api\Database\AbstractConnection {
+        $this->password = $password;
+
+        return $this;
+    }
+    /* ------------------------------------ Setters & Getters END -------------------------------------- */
 }

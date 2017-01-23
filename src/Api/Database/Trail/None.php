@@ -9,10 +9,15 @@ namespace Maleficarum\Api\Database\Trail;
 class None extends \Maleficarum\Api\Database\Trail\AbstractTrail
 {
     /**
-     * @see Maleficarum\Api\Database\Trail\AbstractTrail::trail()
+     * Returns current object
+     * 
+     * @see \Maleficarum\Api\Database\Trail\AbstractTrail::trail()
+     * 
+     * @param array $data
+     *
+     * @return \Maleficarum\Api\Database\Trail\AbstractTrail
      */
-    public function trail(array $data)
-    {
+    public function trail(array $data) {
         return $this;
     }
 }

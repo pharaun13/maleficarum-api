@@ -14,4 +14,6 @@ require_once 'ApiTestCase.php';
 /**
  * Add an empty exception class to use for testing exception handlers.
  */
-class GenericException extends \Exception {}
+class GenericException extends \Exception
+{
+}

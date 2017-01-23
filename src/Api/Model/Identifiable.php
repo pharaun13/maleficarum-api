@@ -10,16 +10,16 @@ interface Identifiable
     /**
      * Set a unique ID for this object.
      *
-     * @param string $id
+     * @param mixed $id
      *
-     * @return $this
+     * @return \Maleficarum\Api\Model\Identifiable
      */
-    public function setId($id);
+    public function setId($id) : \Maleficarum\Api\Model\Identifiable;
 
     /**
      * Fetch the currently assigned unique ID.
      *
-     * @return string
+     * @return mixed
      */
     public function getId();
 }

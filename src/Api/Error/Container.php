@@ -19,8 +19,7 @@ trait Container
      *
      * @return $this
      */
-    public function clearErrors()
-    {
+    public function clearErrors() {
         $this->errors = ['__default_error_namespace__' => []];
 
         return $this;
@@ -34,9 +33,8 @@ trait Container
      * @return $this
      * @throws \InvalidArgumentException
      */
-    public function mergeErrors(array $errors)
-    {
-        if (!array_key_exists('__default_error_namespace__', $errors)) throw new \InvalidArgumentException(sprintf('Incorrect error set provided. \%s::mergeErrors()', get_class($this)));
+    public function mergeErrors(array $errors) {
+        if (!array_key_exists('__default_error_namespace__', $errors)) throw new \InvalidArgumentException(sprintf('Incorrect error set provided. \%s::mergeErrors()', static::class));
 
         foreach ($errors as $namespace => $errs) {
             // skip incorrect namespace entries
@@ -62,12 +60,8 @@ trait Container
      * @param string $namespace
      *
      * @return array
-     * @throws \InvalidArgumentException
      */
-    public function getErrors($namespace = '__default_error_namespace__')
-    {
-        if (!is_string($namespace)) throw new \InvalidArgumentException(sprintf('Incorrect namespace - string expected. \%s::getErrors()', get_class($this)));
-
+    public function getErrors(string $namespace = '__default_error_namespace__') : array {
         if (array_key_exists($namespace, $this->errors)) {
             return $this->errors[$namespace];
         }
@@ -83,8 +77,7 @@ trait Container
      * @return $this
      * @throws \InvalidArgumentException
      */
-    public function setErrors(array $errors)
-    {
+    public function setErrors(array $errors) {
         if (!array_key_exists('__default_error_namespace__', $errors)) throw new \InvalidArgumentException(sprintf('Incorrect error set provided. \%s::setErrors()', get_class($this)));
 
         $this->errors = $errors;
@@ -97,8 +90,7 @@ trait Container
      *
      * @return array
      */
-    public function getAllErrors()
-    {
+    public function getAllErrors() : array {
         return $this->errors;
     }
 
@@ -110,10 +102,7 @@ trait Container
      * @return bool
      * @throws \InvalidArgumentException
      */
-    public function hasErrors($namespace = '__default_error_namespace__')
-    {
-        if (!is_string($namespace)) throw new \InvalidArgumentException(sprintf('Incorrect namespace - string expected. \%s::hasErrors()', get_class($this)));
-
+    public function hasErrors(string $namespace = '__default_error_namespace__') : bool {
         if (array_key_exists($namespace, $this->errors)) {
             return (bool)count($this->errors[$namespace]);
         }
@@ -133,12 +122,8 @@ trait Container
      * @return $this
      * @throws \InvalidArgumentException
      */
-    public function addError($code, $message, $namespace = '__default_error_namespace__', $duplicateToDefault = true)
-    {
-        if (!is_string($message)) throw new \InvalidArgumentException(sprintf('Incorrect message - string expected. \%s::addError()', get_class($this)));
-        if (!preg_match('/^\d{4}\-\d{6}$/', $code)) throw new \InvalidArgumentException(sprintf('Incorrect error code format. \%s::addError()', get_class($this)));
-        if (!is_string($namespace)) throw new \InvalidArgumentException(sprintf('Incorrect namespace - string expected. \%s::addError()', get_class($this)));
-        if (!is_bool($duplicateToDefault)) throw new \InvalidArgumentException(sprintf('Incorrect duplicateToDefault - bool expected. \%s::addError()', get_class($this)));
+    public function addError(string $code, string $message, string $namespace = '__default_error_namespace__', bool $duplicateToDefault = true) {
+        if (!preg_match('/^\d{4}\-\d{6}$/', $code)) throw new \InvalidArgumentException(sprintf('Incorrect error code format. \%s::addError()', static::class));
 
         $error = \Maleficarum\Ioc\Container::get('stdClass');
         $error->msg = $message;

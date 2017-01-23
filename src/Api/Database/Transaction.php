@@ -16,8 +16,7 @@ trait Transaction
      *
      * @return array - list of daos not in transaction
      */
-    protected function detectTransaction(array $daos)
-    {
+    protected function detectTransaction(array $daos) {
         $result = [];
 
         foreach ($daos as $key => $dao) {
@@ -39,8 +38,7 @@ trait Transaction
      *
      * @return $this
      */
-    protected function beginTransaction(array $daos)
-    {
+    protected function beginTransaction(array $daos) {
         foreach ($daos as $dao) {
             $shard = $dao->getDb()->fetchShard($dao->getShardRoute());
             $shard->isConnected() or $shard->connect();
@@ -57,8 +55,7 @@ trait Transaction
      *
      * @return $this
      */
-    protected function commit(array $daos)
-    {
+    protected function commit(array $daos) {
         foreach ($daos as $dao) {
             $shard = $dao->getDb()->fetchShard($dao->getShardRoute());
             $shard->inTransaction() and $shard->commit();
@@ -74,8 +71,7 @@ trait Transaction
      *
      * @return $this
      */
-    protected function rollback(array $daos)
-    {
+    protected function rollback(array $daos) {
         foreach ($daos as $dao) {
             $shard = $dao->getDb()->fetchShard($dao->getShardRoute());
             try {

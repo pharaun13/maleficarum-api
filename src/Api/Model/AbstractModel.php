@@ -27,15 +27,40 @@ abstract class AbstractModel implements \Maleficarum\Api\Model\Identifiable, \Js
      */
     protected $_meta = [];
 
+    /* ------------------------------------ Magic methods START ---------------------------------------- */
+    /**
+     * Fetch value from model meta.
+     *
+     * @param mixed $name
+     *
+     * @return mixed
+     */
+    public function __get($name) {
+        return array_key_exists($name, $this->_meta) ? $this->_meta[$name] : null;
+    }
+
+    /**
+     * Add new value to model meta.
+     *
+     * @param mixed $name
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function __set($name, $value) {
+        $this->_meta[$name] = $value;
+    }
+    /* ------------------------------------ Magic methods END ------------------------------------------ */
+
+    /* ------------------------------------ AbstractModel methods START -------------------------------- */
     /**
      * Merge provided data into this object.
      *
      * @param \stdClass|array $data
      *
-     * @return $this
+     * @return \Maleficarum\Api\Model\AbstractModel
      */
-    public function merge($data)
-    {
+    public function merge($data) : \Maleficarum\Api\Model\AbstractModel {
         // cast input into a valid. unified format
         is_array($data) or $data = (array)$data;
 
@@ -54,10 +79,9 @@ abstract class AbstractModel implements \Maleficarum\Api\Model\Identifiable, \Js
     /**
      * Restore the model object to its most basic state - without any data.
      *
-     * @return $this
+     * @return \Maleficarum\Api\Model\AbstractModel
      */
-    public function clear()
-    {
+    public function clear() : \Maleficarum\Api\Model\AbstractModel {
         // recover all model properties from Reflection
         $properties = (new \ReflectionClass($this))->getProperties(\ReflectionProperty::IS_PRIVATE);
 
@@ -81,8 +105,7 @@ abstract class AbstractModel implements \Maleficarum\Api\Model\Identifiable, \Js
      *
      * @return \stdClass
      */
-    public function getDTO(array $skipProperties = [], $asArray = true)
-    {
+    public function getDTO(array $skipProperties = [], bool $asArray = true) {
         // initialize result storage
         $result = [];
 
@@ -103,50 +126,39 @@ abstract class AbstractModel implements \Maleficarum\Api\Model\Identifiable, \Js
         // return results (structure type as defined)
         return $asArray ? $result : (object)$result;
     }
-
-    /* ------------------------------------ Magic methods START ---------------------------------------- */
-    /**
-     * Fetch value from model meta.
-     *
-     * @param mixed $name
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return array_key_exists($name, $this->_meta) ? $this->_meta[$name] : null;
-    }
-
-    /**
-     * Add new value to model meta.
-     *
-     * @param mixed $name
-     * @param mixed $value
-     */
-    public function __set($name, $value)
-    {
-        $this->_meta[$name] = $value;
-    }
-    /* ------------------------------------ Magic methods END ------------------------------------------ */
+    /* ------------------------------------ AbstractModel methods START -------------------------------- */
 
     /* ------------------------------------ JsonSerializable methods START ----------------------------- */
     /**
-     * @see JsonSerializable::count()
+     * Specify data which should be serialized to JSON
+     * 
+     * @see \JsonSerializable::jsonSerialize()
+     * 
+     * @return \stdClass
      */
-    public function jsonSerialize()
-    {
+    public function jsonSerialize() {
         return $this->getDTO();
     }
     /* ------------------------------------ JsonSerializable methods END ------------------------------- */
 
     /* ------------------------------------ Abstract methods START ------------------------------------- */
     /**
+     * Set a unique ID for this object.
+     * 
      * @see \Maleficarum\Api\Model\Identifiable::setId()
+     * 
+     * @param mixed $id
+     *
+     * @return \Maleficarum\Api\Model\Identifiable
      */
-    abstract public function setId($id);
+    abstract public function setId($id) : \Maleficarum\Api\Model\Identifiable;
 
     /**
+     * Fetch the currently assigned unique ID.
+     * 
      * @see \Maleficarum\Api\Model\Identifiable::getId()
+     * 
+     * @return mixed
      */
     abstract public function getId();
     /* ------------------------------------ Abstract methods END --------------------------------------- */

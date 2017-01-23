@@ -44,7 +44,7 @@ class Bootstrap
 
     /**
      * Internal storage for logger object
-     * 
+     *
      * @var \Psr\Log\LoggerInterface|null
      */
     private $logger = null;
@@ -55,11 +55,11 @@ class Bootstrap
      *
      * @param \Phalcon\Mvc\Micro $app
      * @param string $routesPath
-     * @param int|float $start
+     * @param float $start
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    public function init(\Phalcon\Mvc\Micro $app, $routesPath, $start = 0) {
+    public function init(\Phalcon\Mvc\Micro $app, string $routesPath, float $start = 0) : \Maleficarum\Api\Bootstrap {
         return $this
             ->setUpErrorHandling()
             ->setUpProfilers($start)
@@ -79,7 +79,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    public function conclude() {
+    public function conclude() : \Maleficarum\Api\Bootstrap {
         // complete profiling
         $this->timeProfiler->end();
 
@@ -95,7 +95,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpErrorHandling() {
+    private function setUpErrorHandling() : \Maleficarum\Api\Bootstrap {
         \set_exception_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ExceptionHandler'), 'handle']);
         \set_error_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ErrorHandler'), 'handle']);
 
@@ -104,10 +104,10 @@ class Bootstrap
 
     /**
      * Bootstrap step method - set up logger object.
-     * 
+     *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpLogger() {
+    private function setUpLogger() : \Maleficarum\Api\Bootstrap {
         $this->logger = \Maleficarum\Ioc\Container::get('Monolog\Logger');
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Logger', $this->logger);
 
@@ -119,11 +119,11 @@ class Bootstrap
     /**
      * Bootstrap step method - set up profiler objects.
      *
-     * @param float|null $start
+     * @param float $start
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpProfilers($start = null) {
+    private function setUpProfilers(float $start = 0) : \Maleficarum\Api\Bootstrap {
         $this->timeProfiler = \Maleficarum\Ioc\Container::get('Maleficarum\Profiler\Time')->begin($start);
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Profiler\Time', $this->timeProfiler);
 
@@ -141,26 +141,26 @@ class Bootstrap
      * @return \Maleficarum\Api\Bootstrap
      * @throws \RuntimeException
      */
-    private function setUpEnvironment() {
-        /* @var $env \Maleficarum\Environment\Server */
-        $env = \Maleficarum\Ioc\Container::get('Maleficarum\Environment\Server');
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Environment', $env);
+    private function setUpEnvironment() : \Maleficarum\Api\Bootstrap {
+        /* @var $environment \Maleficarum\Environment\Server */
+        $environment = \Maleficarum\Ioc\Container::get('Maleficarum\Environment\Server');
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Environment', $environment);
 
         // fetch current env
-        $env = $env->getCurrentEnvironment();
+        $environment = $environment->getCurrentEnvironment();
 
         // set handler debug level and error display value based on env
-        if (in_array($env, ['local', 'development', 'staging'])) {
+        if (in_array($environment, ['local', 'development', 'staging'])) {
             \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_FULL);
             ini_set('display_errors', '1');
-        } elseif ($env === 'uat') {
+        } elseif ('uat' === $environment) {
             \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_LIMITED);
             ini_set('display_errors', '0');
-        } elseif ($env === 'production') {
+        } elseif ('production' === $environment) {
             \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_CRUCIAL);
             ini_set('display_errors', '0');
         } else {
-            throw new \RuntimeException('Unrecognised environment. \Maleficarum\Api\Bootstrap::setUpEnvironment()');
+            throw new \RuntimeException(sprintf('Unrecognised environment. \%s::setUpEnvironment()', static::class));
         }
 
         // error reporting is to be enabled on all envs (non-dev ones will have errors logged into syslog)
@@ -177,12 +177,12 @@ class Bootstrap
      * @return \Maleficarum\Api\Bootstrap
      * @throws \RuntimeException
      */
-    private function setUpConfig() {
+    private function setUpConfig() : \Maleficarum\Api\Bootstrap {
         $this->config = \Maleficarum\Ioc\Container::get('Maleficarum\Config\Ini\Config', ['id' => 'config.ini']);
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Config', $this->config);
 
         // check the disabled/enabled switch
-        if (!isset($this->config['global']['enabled']) || (!$this->config['global']['enabled'])) throw new \RuntimeException('Application disabled! \Maleficarum\Api\Bootstrap::setUpConfig()');
+        if (!isset($this->config['global']['enabled']) || (!$this->config['global']['enabled'])) throw new \RuntimeException(sprintf('Application disabled! \%s::setUpConfig()', static::class));
 
         !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('conf_init', 'Config initialized.');
 
@@ -194,7 +194,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpRequest() {
+    private function setUpRequest() : \Maleficarum\Api\Bootstrap {
         $this->request = \Maleficarum\Ioc\Container::get('Maleficarum\Request\Request');
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Request', $this->request);
 
@@ -208,7 +208,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpResponse() {
+    private function setUpResponse() : \Maleficarum\Api\Bootstrap {
         $this->response = \Maleficarum\Ioc\Container::get('Maleficarum\Response\Response');
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Response', $this->response);
 
@@ -222,7 +222,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpSecurity() {
+    private function setUpSecurity() : \Maleficarum\Api\Bootstrap {
         /** @var \Maleficarum\Api\Security\Manager $security */
         $security = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Security\Manager');
         $security->verify();
@@ -237,7 +237,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpQueue() {
+    private function setUpQueue() : \Maleficarum\Api\Bootstrap {
         if (\Maleficarum\Ioc\Container::isRegistered('Maleficarum\Rabbitmq\Connection')) {
             /** @var \Maleficarum\Rabbitmq\Connection $rabbitConnection */
             $rabbitConnection = \Maleficarum\Ioc\Container::get('Maleficarum\Rabbitmq\Connection');
@@ -254,7 +254,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpDatabase() {
+    private function setUpDatabase() : \Maleficarum\Api\Bootstrap {
         /** @var \Maleficarum\Api\Database\Manager $shards */
         $shards = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Database\Manager');
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Database', $shards);
@@ -270,10 +270,9 @@ class Bootstrap
      * @param \Phalcon\Mvc\Micro $app
      * @param string $routesPath
      *
-     * @throws \Maleficarum\Exception\NotFoundException
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpRoutes(\Phalcon\Mvc\Micro $app, $routesPath) {
+    private function setUpRoutes(\Phalcon\Mvc\Micro $app, string $routesPath) : \Maleficarum\Api\Bootstrap {
         // include outside routes
         $route = explode('?', strtolower($this->request->getURI()))[0];
         $route = explode('/', preg_replace('/^\//', '', $route));

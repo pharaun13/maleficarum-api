@@ -24,23 +24,57 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
      * @var array
      */
     protected static $st = [];
+    /* ------------------------------------ Persistable methods START ------------------------------------ */
+    /**
+     * This method returns an array of properties to be used in INSERT and UPDATE CRUD operations. The format for each entry is as follows:
+     *
+     * $entry['param'] = ':bindParamName';
+     * $entry['value'] = 'Param value (as used during the bind process)';
+     * $entry['column'] = 'Name of the storage column to bind against.';
+     *
+     * This is a generic persistable model implementation so it will be useful in most cases but it's not optimal in
+     * terms of performance. Reimplement this method to avoid \ReflectionClass use in high-stress classes.
+     *
+     * @return array
+     */
+    protected function getDbDTO() {
+        $result = [];
+
+        $properties = \Maleficarum\Ioc\Container::get('ReflectionClass', [static::class])->getProperties(\ReflectionProperty::IS_PRIVATE);
+        foreach ($properties as $key => $prop) {
+            if ($prop->name === $this->getModelPrefix() . "Id") continue;
+            if (strpos($prop->name, $this->getModelPrefix()) !== 0) continue;
+
+            $methodName = 'get' . str_replace(' ', "", ucwords($prop->name));
+            if (!method_exists($this, $methodName)) continue;
+
+            $result[$prop->name] = ['param' => ':' . $prop->name . '_token_' . $key, 'value' => $this->$methodName(), 'column' => $prop->name];
+        }
+
+        return $result;
+    }
+    /* ------------------------------------ Persistable methods END -------------------------------------- */
 
     /* ------------------------------------ AbstractModel methods START ---------------------------------- */
     /**
-     * @see \Maleficarum\Api\Model\AbstractModel::getId()
+     * Fetch the currently assigned unique ID.
+     * 
+     * @see \Maleficarum\Api\Model\Identifiable::getId()
+     * @return mixed
      */
-    public function getId()
-    {
+    public function getId() {
         $method = 'get' . ucfirst($this->getModelPrefix()) . 'Id';
 
         return $this->$method();
     }
 
     /**
-     * @see \Maleficarum\Api\Model\AbstractModel::setId()
+     * Set a unique ID for this object.
+     * 
+     * @see \Maleficarum\Api\Model\Identifiable::setId()
+     * @return \Maleficarum\Api\Model\Identifiable
      */
-    public function setId($id)
-    {
+    public function setId($id) : \Maleficarum\Api\Model\Identifiable {
         $method = 'set' . ucfirst($this->getModelPrefix()) . 'Id';
         $this->$method($id);
 
@@ -50,10 +84,12 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
 
     /* ------------------------------------ CRUD methods START ------------------------------------------- */
     /**
+     * Persist data stored in this model as a new storage entry.
+     * 
      * @see \Maleficarum\Api\Model\CRUD::create()
+     * @return \Maleficarum\Api\Model\CRUD
      */
-    public function create()
-    {
+    public function create() : \Maleficarum\Api\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -102,10 +138,13 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
     }
 
     /**
+     * Refresh this model with current data from the storage
+     *
      * @see \Maleficarum\Api\Model\CRUD::read()
+     * @return \Maleficarum\Api\Model\CRUD
+     * @throws \Maleficarum\Exception\NotFoundException
      */
-    public function read()
-    {
+    public function read() : \Maleficarum\Api\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -128,10 +167,12 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
     }
 
     /**
+     * Update storage entry with data currently stored in this model.
+     *
      * @see \Maleficarum\Api\Model\CRUD::update()
+     * @return \Maleficarum\Api\Model\CRUD
      */
-    public function update()
-    {
+    public function update() : \Maleficarum\Api\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -170,10 +211,12 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
     }
 
     /**
+     * Delete an entry from the storage based on ID data stored in this model
+     *
      * @see \Maleficarum\Api\Model\CRUD::delete()
+     * @return \Maleficarum\Api\Model\CRUD
      */
-    public function delete()
-    {
+    public function delete() : \Maleficarum\Api\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -190,59 +233,36 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
     }
 
     /**
+     * Validate data stored in this model to check if it can be persisted in storage.
+     * 
+     * @param bool $clear
+     *
      * @see \Maleficarum\Api\Model\CRUD::validate()
+     * @return bool
      */
-    abstract public function validate($clear = true);
+    abstract public function validate(bool $clear = true) : bool;
     /* ------------------------------------ CRUD methods END --------------------------------------------- */
 
-    /**
-     * This method returns an array of properties to be used in INSERT and UPDATE CRUD operations. The format for each entry is as follows:
-     *
-     * $entry['param'] = ':bindParamName';
-     * $entry['value'] = 'Param value (as used during the bind process)';
-     * $entry['column'] = 'Name of the storage column to bind against.';
-     *
-     * This is a generic persistable model implementation so it will be useful in most cases but it's not optimal in
-     * terms of performance. Reimplement this method to avoid \ReflectionClass use in high-stress classes.
-     *
-     * @return array
-     */
-    protected function getDbDTO()
-    {
-        $result = [];
-
-        $properties = \Maleficarum\Ioc\Container::get('ReflectionClass', [static::class])->getProperties(\ReflectionProperty::IS_PRIVATE);
-        foreach ($properties as $key => $prop) {
-            if ($prop->name === $this->getModelPrefix() . "Id") continue;
-            if (strpos($prop->name, $this->getModelPrefix()) !== 0) continue;
-
-            $methodName = 'get' . str_replace(' ', "", ucwords($prop->name));
-            if (!method_exists($this, $methodName)) continue;
-
-            $result[$prop->name] = ['param' => ':' . $prop->name . '_token_' . $key, 'value' => $this->$methodName(), 'column' => $prop->name];
-        }
-
-        return $result;
-    }
-
+    /* ------------------------------------ Abstract methods START ------------------------------------- */
     /**
      * Fetch the name of current shard.
      *
      * @return string
      */
-    abstract public function getShardRoute();
+    abstract public function getShardRoute() : string;
 
     /**
      * Fetch the name of db table used as data source for this model.
      *
      * @return string
      */
-    abstract protected function getTable();
+    abstract protected function getTable() : string;
 
     /**
      * Fetch the prefix used as a prefix for database column property names.
      *
      * @return string
      */
-    abstract protected function getModelPrefix();
+    abstract protected function getModelPrefix() : string;
+    /* ------------------------------------ Abstract methods END --------------------------------------- */
 }

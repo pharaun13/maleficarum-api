@@ -53,22 +53,22 @@ abstract class Generic
      */
     use \Maleficarum\Api\Logger\Dependant;
 
+    /* ------------------------------------ Generic methods START -------------------------------------- */
     /**
      * Perform URL to class method remapping.
      *
      * @param string $method
      *
-     * @return bool
+     * @return mixed
      * @throws \Maleficarum\Exception\NotFoundException
      */
-    public function __remap($method)
-    {
+    public function __remap(string $method) {
         $action = $method . 'Action';
 
         if (method_exists($this, $action)) {
             $this->{$action}();
         } else {
-            throw new \Maleficarum\Exception\NotFoundException('404 - page not found.');
+            $this->respondToNotFound('404 - page not found.');
         }
 
         return true;
@@ -79,10 +79,10 @@ abstract class Generic
      *
      * @param array $errors
      *
+     * @return void
      * @throws \Maleficarum\Exception\BadRequestException
      */
-    protected function respondToBadRequest(array $errors = [])
-    {
+    protected function respondToBadRequest(array $errors = []) {
         throw (new \Maleficarum\Exception\BadRequestException())->setErrors($errors);
     }
 
@@ -91,10 +91,10 @@ abstract class Generic
      *
      * @param array $errors
      *
+     * @return void
      * @throws \Maleficarum\Exception\ConflictException
      */
-    protected function respondToConflict(array $errors = [])
-    {
+    protected function respondToConflict(array $errors = []) {
         throw (new \Maleficarum\Exception\ConflictException())->setErrors($errors);
     }
 
@@ -103,10 +103,11 @@ abstract class Generic
      *
      * @param string $message
      *
+     * @return void
      * @throws \Maleficarum\Exception\NotFoundException
      */
-    protected function respondToNotFound($message)
-    {
+    protected function respondToNotFound(string $message) {
         throw new \Maleficarum\Exception\NotFoundException($message);
     }
+    /* ------------------------------------ Generic methods END ---------------------------------------- */
 }

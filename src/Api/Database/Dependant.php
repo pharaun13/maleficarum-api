@@ -21,8 +21,7 @@ trait Dependant
      *
      * @return $this
      */
-    public function getDb()
-    {
+    public function getDb() {
         return $this->db;
     }
 
@@ -33,8 +32,7 @@ trait Dependant
      *
      * @return $this
      */
-    public function setDb(\Maleficarum\Api\Database\Manager $db)
-    {
+    public function setDb(\Maleficarum\Api\Database\Manager $db) {
         $this->db = $db;
 
         return $this;
@@ -45,8 +43,7 @@ trait Dependant
      *
      * @return $this
      */
-    public function detachDb()
-    {
+    public function detachDb() {
         $this->db = null;
 
         return $this;

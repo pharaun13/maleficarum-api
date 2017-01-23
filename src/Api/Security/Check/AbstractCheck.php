@@ -14,5 +14,5 @@ abstract class AbstractCheck
      *
      * @return bool
      */
-    abstract public function execute(array $data = []);
+    abstract public function execute(array $data = []) : bool;
 }

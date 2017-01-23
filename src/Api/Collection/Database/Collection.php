@@ -33,18 +33,15 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
         '__lock',                       // add FOR UPDATE to generated query - since locking works inside a transaction, using this will trigger an Exception when used in an atomic operation
     ];
 
-    /* ------------------------------------ populate component methods START --------------------------- */
+    /* ------------------------------------ Populate component methods START --------------------------- */
     /**
      * Populate this collection with data based on filters and options provided in the input parameter.
      *
      * @param array $data
      *
-     * @return $this
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      */
-    public function populate(array $data = [])
-    {
+    public function populate(array $data = []) : \Maleficarum\Api\Collection\AbstractCollection {
         // apply initial tests
         $this->populate_testDb()->populate_testLock($data)->populate_testSorting($data)->populate_testSubset($data);
 
@@ -87,13 +84,11 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
     /**
      * Test database connection.
      *
-     * @return $this
-     * @throws \RuntimeException
+     * @return \Maleficarum\Api\Collection\Database\Collection
      */
-    protected function populate_testDb()
-    {
+    protected function populate_testDb() : \Maleficarum\Api\Collection\Database\Collection {
         if (is_null($this->getDb())) {
-            throw new \RuntimeException(sprintf('Cannot populate this collection with data prior to injecting a database shard manager. \%s::populate()', get_class($this)));
+            throw new \RuntimeException(sprintf('Cannot populate this collection with data prior to injecting a database shard manager. \%s::populate()', static::class));
         }
 
         return $this;
@@ -104,11 +99,10 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      *
      * @param array $data
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\Database\Collection
      * @throws \InvalidArgumentException
      */
-    protected function populate_testSorting(array $data)
-    {
+    protected function populate_testSorting(array $data) : \Maleficarum\Api\Collection\Database\Collection {
         if (array_key_exists('__sorting', $data)) {
             is_array($data['__sorting']) && count($data['__sorting']) or $this->respondToInvalidArgument('Incorrect sorting data. \%s::populate()');
 
@@ -129,11 +123,10 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      *
      * @param array $data
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\Database\Collection
      * @throws \InvalidArgumentException
      */
-    protected function populate_testSubset(array $data)
-    {
+    protected function populate_testSubset(array $data) : \Maleficarum\Api\Collection\Database\Collection {
         if (array_key_exists('__subset', $data)) {
             is_array($data['__subset']) or $this->respondToInvalidArgument('Incorrect subset data. \%s::populate()');
             !isset($data['__subset']['limit']) || !is_int($data['__subset']['limit']) || $data['__subset']['limit'] < 1 and $this->respondToInvalidArgument('Incorrect subset data. \%s::populate()');
@@ -148,11 +141,10 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      *
      * @param array $data
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\Database\Collection
      * @throws \InvalidArgumentException
      */
-    protected function populate_testLock(array $data)
-    {
+    protected function populate_testLock(array $data) : \Maleficarum\Api\Collection\Database\Collection {
         if (array_key_exists('__lock', $data)) {
             $this->getDb()->fetchShard($this->getShardRoute())->isConnected() or $this->respondToInvalidArgument('Cannot lock table outside of a transaction. \%s::populate()');
             $this->getDb()->fetchShard($this->getShardRoute())->inTransaction() or $this->respondToInvalidArgument('Cannot lock table outside of a transaction. \%s::populate()');
@@ -168,8 +160,7 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      *
      * @return string
      */
-    protected function populate_prependSection(\stdClass $dto)
-    {
+    protected function populate_prependSection(\stdClass $dto) : string {
         return '';
     }
 
@@ -180,12 +171,8 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param \stdClass $dto
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function populate_basicQuery($query, \stdClass $dto)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_basicQuery(string $query, \stdClass $dto) : string {
         // add basic select clause
         $query .= 'SELECT ';
 
@@ -244,12 +231,8 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param \stdClass $dto
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function populate_attachFilter($query, \stdClass $dto)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_attachFilter(string $query, \stdClass $dto) : string {
         foreach ($dto->data as $key => $data) {
             // skip any special tokens
             if (in_array($key, self::$specialTokens)) continue;
@@ -282,12 +265,8 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param string $query
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function populate_blanketSQL($query)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_blanketSQL(string $query) : string {
         return $query . '1=1 ';
     }
 
@@ -298,12 +277,8 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param \stdClass $dto
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function populate_grouping($query, \stdClass $dto)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_grouping(string $query, \stdClass $dto) : string {
         if (array_key_exists('__count', $dto->data) && is_array($dto->data['__count']) && count($dto->data['__count'])) {
             $query .= 'GROUP BY "' . implode('", "', $dto->data['__count']) . '" ';
         }
@@ -322,12 +297,8 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param \stdClass $dto
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function populate_lock($query, \stdClass $dto)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_lock(string $query, \stdClass $dto) : string {
         array_key_exists('__lock', $dto->data) and $query .= 'FOR UPDATE ';
 
         return $query;
@@ -340,12 +311,8 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param \stdClass $dto
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function populate_sorting($query, \stdClass $dto)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_sorting(string $query, \stdClass $dto) : string {
         $query .= 'ORDER BY ';
         $fields = [];
         foreach ($dto->data['__sorting'] as $val) $fields[] = "\"$val[0]\" $val[1]";
@@ -361,12 +328,8 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param \stdClass $dto
      *
      * @return string
-     * @throws \InvalidArgumentException
      */
-    protected function populate_subset($query, \stdClass $dto)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_subset(string $query, \stdClass $dto) : string {
         $query .= 'LIMIT :limit OFFSET :offset ';
         $dto->params[':limit'] = $dto->data['__subset']['limit'];
         $dto->params[':offset'] = $dto->data['__subset']['offset'];
@@ -380,13 +343,9 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @param string $query
      * @param \stdClass $dto
      *
-     * @return $this
-     * @throws \InvalidArgumentException
+     * @return \Maleficarum\Api\Collection\Database\Collection
      */
-    protected function populate_fetchData($query, \stdClass $dto)
-    {
-        is_string($query) or $this->respondToInvalidArgument('Incorrect query param - string expected. \%s::populate()');
-
+    protected function populate_fetchData(string $query, \stdClass $dto) : \Maleficarum\Api\Collection\Database\Collection {
         // fetch a shard connection
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
 
@@ -404,17 +363,14 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
 
         return $this;
     }
-    /* ------------------------------------ populate component methods END ----------------------------- */
+    /* ------------------------------------ Populate component methods END ----------------------------- */
 
     /**
      * Insert all entries in this collection to it's storage.
-     * 
-     * @return $this
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     *
+     * @return \Maleficarum\Api\Collection\Database\Collection
      */
-    public function insertAll()
-    {
+    public function insertAll() : \Maleficarum\Api\Collection\Database\Collection {
         // test database connection
         $this->populate_testDb();
 
@@ -475,13 +431,10 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
 
     /**
      * Delete all entries in this collection from it's storage.
-     * 
-     * @return $this
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     *
+     * @return \Maleficarum\Api\Collection\Database\Collection
      */
-    public function deleteAll()
-    {
+    public function deleteAll() : \Maleficarum\Api\Collection\Database\Collection {
         // test database connection
         $this->populate_testDb();
 
@@ -532,6 +485,7 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
         return $this;
     }
 
+    /* ------------------------------------ Helper methods START --------------------------------------- */
     /**
      * Fetch current data set as a prepared set used by modification methods (insertAll(), deleteAll()).
      * This method should be overridden in collections that need to behave differently than using a 1:1 mapping of the main data container.
@@ -541,8 +495,7 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @return array
      * @throws \InvalidArgumentException
      */
-    protected function prepareElements($mode)
-    {
+    protected function prepareElements(string $mode) : array {
         ($mode === 'INSERT' || $mode === 'DELETE') or $this->respondToInvalidArgument('Incorrect preparation mode. \%s::prepareElements()');
 
         return $this->data;
@@ -552,10 +505,9 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * Iterate over all current data entries and perform any data formatting necessary. This method should be overloaded in any inheriting collection object
      * that requires any specific data decoding such as JSON de-serialization or date formatting.
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\Database\Collection
      */
-    protected function format()
-    {
+    protected function format() : \Maleficarum\Api\Collection\Database\Collection {
         return $this;
     }
 
@@ -566,8 +518,7 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      *
      * @return array
      */
-    private function parseFilter($key)
-    {
+    private function parseFilter(string $key) : array {
         $result = ['column' => '"' . $key . '"', 'operator' => 'IN', 'prefix' => ':' . $key . '_', 'value_prefix' => '', 'value_suffix' => ''];
 
         // attempt to recover filters
@@ -605,13 +556,15 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
 
         return $result;
     }
+    /* ------------------------------------ Helper methods END ----------------------------------------- */
+
     /* ------------------------------------ Abstract methods START ------------------------------------- */
     /**
      * Fetch the name of current shard.
      *
      * @return string
      */
-    abstract public function getShardRoute();
+    abstract public function getShardRoute() : string;
 
     /**
      * Fetch the name of order column - should return null on collections without order data.
@@ -633,13 +586,13 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      * @abstract
      * @return string
      */
-    abstract protected function getTable();
+    abstract protected function getTable() : string;
 
     /**
      * Return a list of column names that are allowed to be used for sorting.
      *
      * @return array
      */
-    abstract protected function getSortColumns();
+    abstract protected function getSortColumns() : array;
     /* ------------------------------------ Abstract methods END --------------------------------------- */
 }

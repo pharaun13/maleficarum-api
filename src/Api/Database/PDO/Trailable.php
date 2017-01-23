@@ -22,18 +22,20 @@ class Trailable extends \PDO
      */
     private $trail = null;
 
+    /* ------------------------------------ Magic methods START ---------------------------------------- */
     /**
      * Initialize a new instance of a trailable PDO connection.
      *
      * @param \Maleficarum\Api\Database\Trail\AbstractTrail $trail
      * @param string $dsn
      */
-    public function __construct(\Maleficarum\Api\Database\Trail\AbstractTrail $trail, $dsn)
-    {
+    public function __construct(\Maleficarum\Api\Database\Trail\AbstractTrail $trail, string $dsn) {
         $this->trail = $trail;
         parent::__construct($dsn);
     }
+    /* ------------------------------------ Magic methods END ------------------------------------------ */
 
+    /* ------------------------------------ Trailable methods START ------------------------------------ */
     /**
      * Trail provided data. (Outside of transaction the trail is immediate. Inside a transaction it will be stored in transaction log and sent to the trail logic on commit.)
      *
@@ -41,8 +43,7 @@ class Trailable extends \PDO
      *
      * @return \Maleficarum\Api\Database\PDO\Trailable
      */
-    public function trail(array $data)
-    {
+    public function trail(array $data) : \Maleficarum\Api\Database\PDO\Trailable {
         if ($this->inTransaction()) {
             // in transaction -> send to log
             $this->log[] = $data;
@@ -62,14 +63,15 @@ class Trailable extends \PDO
 
         return $this;
     }
+    /* ------------------------------------ Trailable methods END -------------------------------------- */
 
+    /* ------------------------------------ PDO methods START ------------------------------------------ */
     /**
      * Commit this transaction and send all audit log entries into the trail.
      *
      * @return bool
      */
-    public function commit()
-    {
+    public function commit() : bool {
         $result = parent::commit();
 
         // send all data in commit log to trail
@@ -95,8 +97,7 @@ class Trailable extends \PDO
      *
      * @return bool
      */
-    public function rollback()
-    {
+    public function rollback() : bool {
         $result = parent::rollBack();
 
         // reset the log storage
@@ -104,4 +105,5 @@ class Trailable extends \PDO
 
         return $result;
     }
+    /* ------------------------------------ PDO methods END -------------------------------------------- */
 }

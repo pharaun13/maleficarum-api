@@ -9,6 +9,7 @@ namespace Maleficarum\Api\Database\Trail;
 
 abstract class AbstractTrail
 {
+    /* ------------------------------------ Abstract methods START ------------------------------------- */
     /**
      * Send the provided audit trail packet into the log.
      *
@@ -17,4 +18,5 @@ abstract class AbstractTrail
      * @return mixed
      */
     abstract function trail(array $data);
+    /* ------------------------------------ Abstract methods END --------------------------------------- */
 }

@@ -30,8 +30,7 @@ class Manager
      * @return \Maleficarum\Api\Database\Manager
      * @throws \InvalidArgumentException
      */
-    public function attachShard(\Maleficarum\Api\Database\AbstractConnection $shard, $route)
-    {
+    public function attachShard(\Maleficarum\Api\Database\AbstractConnection $shard, $route) {
         if (!is_string($route) || !mb_strlen($route)) {
             throw new \InvalidArgumentException('Incorrect route provided - non empty string expected. \Maleficarum\Api\Database\Manager::attachShard()');
         }
@@ -49,8 +48,7 @@ class Manager
      * @return \Maleficarum\Api\Database\Manager
      * @throws \InvalidArgumentException
      */
-    public function detachShard($route)
-    {
+    public function detachShard($route) {
         if (!is_string($route) || !mb_strlen($route)) {
             throw new \InvalidArgumentException('Incorrect route provided - non empty string expected. \Maleficarum\Api\Database\Manager::detachShard()');
         }
@@ -70,8 +68,7 @@ class Manager
      * @throws \InvalidArgumentException
      * @return \Maleficarum\Api\Database\AbstractConnection
      */
-    public function fetchShard($route)
-    {
+    public function fetchShard($route) {
         if (!is_string($route) || !mb_strlen($route)) {
             throw new \InvalidArgumentException('Incorrect route provided - non empty string expected. \Maleficarum\Api\Database\Manager::fetchShard()');
         }

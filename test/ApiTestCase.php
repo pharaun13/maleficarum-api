@@ -4,63 +4,65 @@
  */
 namespace Maleficarum\Api\Test;
 
-class ApiTestCase extends \PHPUnit\Framework\TestCase {
-	/**
-	 * ATTRIBUTES
-	 */
+class ApiTestCase extends \PHPUnit\Framework\TestCase
+{
+    /**
+     * ATTRIBUTES
+     */
 
-	private static $context = null;
-	
-	/**
-	 * FIXTURES
-	 */
-	
-	/**
-	 * Executed before each test suite begins.
-	 */
-	public function setUp() {
-		// set current context
-		$this->setContext($this->getName());
+    private static $context = null;
 
-		// attempt to load suite specific ioc defs
-		$path = SRC_PATH . DIRECTORY_SEPARATOR . 'Ioc' . DIRECTORY_SEPARATOR . str_replace('Maleficarum/', '', str_replace('\\', DIRECTORY_SEPARATOR, str_replace('Test\\', '', static::class))).'.ioc.php';
+    /**
+     * FIXTURES
+     */
 
-		if (is_readable($path)) {
-			require $path;
-		}
-	}
+    /**
+     * Executed before each test suite begins.
+     */
+    public function setUp() {
+        // set current context
+        $this->setContext($this->getName());
 
-	/**
-	 * Executed after each test suite gets done.
-	 */
-	public static function tearDownAfterClass() {
-		// clean up any ioc defs that were created by this test suite
-		$initializers = new \ReflectionProperty("Maleficarum\Ioc\Container", "initializers");
-		$initializers->setAccessible(true);
-		$initializers->setValue([]);
-		$initializers->setAccessible(false);
+        // attempt to load suite specific ioc defs
+        $path = SRC_PATH . DIRECTORY_SEPARATOR . 'Ioc' . DIRECTORY_SEPARATOR . str_replace('Maleficarum/', '', str_replace('\\', DIRECTORY_SEPARATOR, str_replace('Test\\', '', static::class))) . '.ioc.php';
 
-		$dependencies = new \ReflectionProperty("Maleficarum\Ioc\Container", "dependencies");
-		$dependencies->setAccessible(true);
-		$dependencies->setValue([]);
-		$dependencies->setAccessible(false);
+        if (is_readable($path)) {
+            require $path;
+        }
+    }
 
-		$loadedDefinitions = new \ReflectionProperty("Maleficarum\Ioc\Container", "loadedDefinitions");
-		$loadedDefinitions->setAccessible(true);
-		$loadedDefinitions->setValue([]);
-		$loadedDefinitions->setAccessible(false);
-	}
-	
-	/**
-	 * HELPERS
-	 */
-	
-	protected function getContext() {
-		return self::$context;
-	}
-	
-	protected function setContext($context) {
-		self::$context = $context;
-		return $this;
-	}
+    /**
+     * Executed after each test suite gets done.
+     */
+    public static function tearDownAfterClass() {
+        // clean up any ioc defs that were created by this test suite
+        $initializers = new \ReflectionProperty("Maleficarum\Ioc\Container", "initializers");
+        $initializers->setAccessible(true);
+        $initializers->setValue([]);
+        $initializers->setAccessible(false);
+
+        $dependencies = new \ReflectionProperty("Maleficarum\Ioc\Container", "dependencies");
+        $dependencies->setAccessible(true);
+        $dependencies->setValue([]);
+        $dependencies->setAccessible(false);
+
+        $loadedDefinitions = new \ReflectionProperty("Maleficarum\Ioc\Container", "loadedDefinitions");
+        $loadedDefinitions->setAccessible(true);
+        $loadedDefinitions->setValue([]);
+        $loadedDefinitions->setAccessible(false);
+    }
+
+    /**
+     * HELPERS
+     */
+
+    protected function getContext() {
+        return self::$context;
+    }
+
+    protected function setContext($context) {
+        self::$context = $context;
+
+        return $this;
+    }
 }

@@ -21,18 +21,17 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      */
     protected $data = [];
 
+    /* ------------------------------------ AbstractCollection methods START --------------------------- */
     /**
      * Attach provided input and flatten result into a 1:1 relation.
      *
-     * @param \Maleficarum\Api\Collection\AbstractCollection|array $input
+     * @param array|\Maleficarum\Api\Collection\AbstractCollection $input
      * @param string $newParamName
      * @param array $mapping
      *
-     * @return $this
-     * @throws \InvalidArgumentException
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      */
-    public function attachflat($input, $newParamName, $mapping)
-    {
+    public function attachflat($input, string $newParamName, array $mapping) : \Maleficarum\Api\Collection\AbstractCollection {
         $this->attach($input, $newParamName, $mapping);
 
         // flatten
@@ -44,21 +43,18 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
     /**
      * Attach data from another collection into this one base on a matching column.
      *
-     * @param \Maleficarum\Api\Collection\AbstractCollection|array $input
+     * @param array|\Maleficarum\Api\Collection\AbstractCollection $input
      * @param string $newParamName
      * @param array $mapping
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      * @throws \InvalidArgumentException
      */
-    public function attach($input, $newParamName, $mapping)
-    {
+    public function attach($input, string $newParamName, array $mapping) : \Maleficarum\Api\Collection\AbstractCollection {
         if (!count($this->data)) return $this;
 
         is_array($input) || $input instanceof \Maleficarum\Api\Collection\AbstractCollection or $this->respondToInvalidArgument('Incorrect input provided - array or Collection expected. \%s::attach()');
-        is_string($newParamName) or $this->respondToInvalidArgument('Incorrect param name provided - string expected. \%s::attach()');
-
-        is_array($mapping) && array_key_exists('local', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::attach()');
+        array_key_exists('local', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::attach()');
 
         array_key_exists('remote', $mapping) or $mapping['remote'] = $mapping['local'];
 
@@ -74,24 +70,21 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
         return $this;
     }
 
-
     /**
      * Attach provided input but use one of it's columns as indexes of the attached list.
      *
-     * @param \Maleficarum\Api\Collection\AbstractCollection|array $input
+     * @param array|\Maleficarum\Api\Collection\AbstractCollection $input
      * @param string $newParamName
      * @param array $mapping
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      * @throws \InvalidArgumentException
      */
-    public function attachindexed($input, $newParamName, $mapping)
-    {
+    public function attachindexed($input, string $newParamName, array $mapping) : \Maleficarum\Api\Collection\AbstractCollection {
         if (!count($this->data)) return $this;
 
         is_array($input) || $input instanceof \Maleficarum\Api\Collection\AbstractCollection or $this->respondToInvalidArgument('Incorrect input provided - array or Collection expected. \%s::attachindexed()');
-        is_string($newParamName) or $this->respondToInvalidArgument('Incorrect param name provided - string expected. \%s::attachindexed()');
-        is_array($mapping) && array_key_exists('local', $mapping) && array_key_exists('index', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::attachindexed()');
+        array_key_exists('local', $mapping) && array_key_exists('index', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::attachindexed()');
 
         array_key_exists('remote', $mapping) or $mapping['remote'] = $mapping['local'];
 
@@ -114,20 +107,18 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
     /**
      * Attach provided input, but use one of it's columns as indexes of the attached list, and flatten result into a 1:1 relation.
      *
-     * @param \Maleficarum\Api\Collection\AbstractCollection|array $input
+     * @param array|\Maleficarum\Api\Collection\AbstractCollection $input
      * @param string $newParamName
      * @param array $mapping
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      * @throws \InvalidArgumentException
      */
-    public function attachflatindexed($input, $newParamName, $mapping)
-    {
+    public function attachflatindexed($input, string $newParamName, array $mapping) : \Maleficarum\Api\Collection\AbstractCollection {
         if (!count($this->data)) return $this;
 
         is_array($input) || $input instanceof \Maleficarum\Api\Collection\AbstractCollection or $this->respondToInvalidArgument('Incorrect input provided - array or Collection expected. \%s::attachflatindexed()');
-        is_string($newParamName) or $this->respondToInvalidArgument('Incorrect param name provided - string expected. \%s::attachflatindexed()');
-        is_array($mapping) && array_key_exists('local', $mapping) && array_key_exists('index', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::attachflatindexed()');
+        array_key_exists('local', $mapping) && array_key_exists('index', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::attachflatindexed()');
 
         array_key_exists('remote', $mapping) or $mapping['remote'] = $mapping['local'];
 
@@ -157,17 +148,15 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @param string $newParamName
      * @param array $mapping
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      * @throws \InvalidArgumentException
      */
-    public function usemap(\Maleficarum\Api\Collection\AbstractCollection $input, \Maleficarum\Api\Collection\AbstractCollection $map, $newParamName, $mapping)
-    {
+    public function usemap(\Maleficarum\Api\Collection\AbstractCollection $input, \Maleficarum\Api\Collection\AbstractCollection $map, string $newParamName, array $mapping) : \Maleficarum\Api\Collection\AbstractCollection {
         if (!count($this->data)) return $this;
         if (!count($input)) return $this;
         if (!count($map)) return $this;
 
-        is_string($newParamName) or $this->respondToInvalidArgument('Incorrect param name provided - string expected. \%s::usemap()');
-        is_array($mapping) && array_key_exists('local', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::usemap()');
+        array_key_exists('local', $mapping) or $this->respondToInvalidArgument('Incorrect mapping provided - correct array expected. \%s::usemap()');
 
         /** Init */
         // remote not present - use local are remote
@@ -220,11 +209,8 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function reindex($column)
-    {
+    public function reindex(string $column) : array {
         if (!count($this->data)) return [];
-
-        is_string($column) or $this->respondToInvalidArgument('Invalid column name provided - string expected. \%s::reindex()');
 
         $result = [];
         foreach ($this->data as $value) {
@@ -246,8 +232,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      *
      * @return array
      */
-    public function toArray(array $skip = [])
-    {
+    public function toArray(array $skip = []) : array {
         if (!count($skip)) {
             return (array)$this->data;
         } else {
@@ -265,14 +250,10 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      *
      * @param string $property
      *
-     * @return $this
-     * @throws \InvalidArgumentException
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      */
-    public function purge($property)
-    {
+    public function purge(string $property) : \Maleficarum\Api\Collection\AbstractCollection {
         if (!count($this->data)) return $this;
-
-        is_string($property) or $this->respondToInvalidArgument('Incorrect property name provided - string expected. \%s::purge()');
 
         foreach ($this->data as &$el) {
             if (is_array($el) && array_key_exists($property, $el)) unset($el[$property]);
@@ -290,11 +271,8 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function extract($column)
-    {
+    public function extract(string $column) : array {
         if (!count($this->data)) return [];
-
-        is_string($column) or $this->respondToInvalidArgument('Incorrect column name provided - string expected. \%s::extract()');
 
         // since the next check relies on the current internal function we need to reset our data structure to ensure that a "current" element exists
         reset($this->data);
@@ -319,8 +297,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function extractMany(array $columns = [])
-    {
+    public function extractMany(array $columns = []) : array {
         if (!count($this->data)) return [];
 
         count($columns) or $this->respondToInvalidArgument('Incorrect columns name provided - nonempty array expected. \%s::extractMany()');
@@ -348,8 +325,7 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @return array
      * @throws \InvalidArgumentException
      */
-    public function removeMany(array $columns)
-    {
+    public function removeMany(array $columns) : array {
         if (!count($this->data)) return [];
 
         // validate input
@@ -382,12 +358,8 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    public function map($keyCol, $valCol)
-    {
+    public function map(string $keyCol, string $valCol) : array {
         if (!count($this->data)) return [];
-
-        is_string($keyCol) or $this->respondToInvalidArgument('Incorrect column name (key) provided - string expected. \%s::map()');
-        is_string($valCol) or $this->respondToInvalidArgument('Incorrect column name (value) provided - string expected. \%s::map()');
 
         $result = [];
         foreach ($this->data as $el) {
@@ -409,10 +381,8 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @param string $column
      *
      * @return array
-     * @throws \InvalidArgumentException
      */
-    public function groupflat($column)
-    {
+    public function groupflat(string $column) : array {
         $result = $this->group($column);
 
         foreach ($result as &$el) $el = array_shift($el);
@@ -426,13 +396,9 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @param string $column
      *
      * @return array
-     * @throws \InvalidArgumentException
      */
-    public function group($column)
-    {
+    public function group(string $column) : array {
         if (!count($this->data)) return [];
-
-        is_string($column) or $this->respondToInvalidArgument('Invalid column name provided - string expected. \%s::group()');
 
         $result = [];
         foreach ($this->data as $value) {
@@ -446,20 +412,15 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
     }
 
     /**
-     * Extract two specified columns as a map of grouped values. Useful when the $keyCol column has nonunique values.
+     * Extract two specified columns as a map of grouped values. Useful when the $keyCol column has non-unique values.
      *
      * @param string $keyCol
      * @param string $valCol
      *
      * @return array
-     * @throws \InvalidArgumentException
      */
-    public function regroup($keyCol, $valCol)
-    {
+    public function regroup(string $keyCol, string $valCol) : array {
         if (!count($this->data)) return [];
-
-        is_string($keyCol) or $this->respondToInvalidArgument('Incorrect column name (key) provided - string expected. \%s::regroup()');
-        is_string($valCol) or $this->respondToInvalidArgument('Incorrect column name (value) provided - string expected. \%s::regroup()');
 
         $result = [];
         foreach ($this->data as $el) {
@@ -479,38 +440,20 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      * @param int $offset
      *
      * @return array
-     * @throws \InvalidArgumentException
      */
-    public function subset($limit = 10, $offset = 0)
-    {
-        is_int($limit) or $this->respondToInvalidArgument('Incorrect limit provided - integer expected. \%s::subset()');
-        is_int($offset) or $this->respondToInvalidArgument('Incorrect offset provided - integer expected. \%s::subset()');
-
+    public function subset(int $limit = 10, int $offset = 0) : array {
         return array_slice($this->data, $offset, $limit);
     }
-
-    /**
-     * This method is a code style helper - it will simply throw an \InvalidArgumentException
-     *
-     * @param string $msg
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function respondToInvalidArgument($msg)
-    {
-        throw new \InvalidArgumentException(sprintf($msg, get_class($this)));
-    }
-
     /* ------------------------------------ Setters & Getters START ------------------------------------ */
+
     /**
      * Replace current data with the provided container.
      *
      * @param array $data
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      */
-    public function setData(array $data)
-    {
+    public function setData(array $data) : \Maleficarum\Api\Collection\AbstractCollection {
         $this->data = $data;
 
         return $this;
@@ -519,10 +462,9 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
     /**
      * Clear this collection of all data.
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      */
-    public function clear()
-    {
+    public function clear() : \Maleficarum\Api\Collection\AbstractCollection {
         $this->data = [];
 
         return $this;
@@ -531,98 +473,133 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
 
     /* ------------------------------------ ArrayAccess methods START ---------------------------------- */
     /**
-     * @see ArrayAccess::offsetExists()
+     * Checks if the given key exists in the array
+     *
+     * @see \ArrayAccess::offsetExists()
+     *
+     * @param mixed $offset
+     *
+     * @return bool
      */
-    public function offsetExists($offset)
-    {
+    public function offsetExists($offset) : bool {
         return array_key_exists($offset, $this->data);
     }
 
     /**
-     * @see ArrayAccess::offsetGet()
+     * Gets the element with the given key
+     *
+     * @see \ArrayAccess::offsetGet()
+     *
+     * @param mixed $offset
+     *
+     * @return mixed
      */
-    public function offsetGet($offset)
-    {
+    public function offsetGet($offset) {
         return $this->data[$offset];
     }
 
     /**
-     * @see ArrayAccess::offsetSet()
+     * Sets the element at the given key
+     *
+     * @see \ArrayAccess::offsetSet()
+     *
+     * @param mixed $offset
+     * @param mixed $value
+     *
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      */
-    public function offsetSet($offset, $value)
-    {
+    public function offsetSet($offset, $value) {
         $this->data[$offset] = $value;
 
         return $this;
     }
 
     /**
-     * @see ArrayAccess::offsetUnset()
+     * Unset the element at the given key
+     *
+     * @see \ArrayAccess::offsetUnset()
+     *
+     * @param mixed $offset
+     *
+     * @return void
      */
-    public function offsetUnset($offset)
-    {
+    public function offsetUnset($offset) {
         unset($this->data[$offset]);
     }
     /* ------------------------------------ ArrayAccess methods END ------------------------------------ */
 
     /* ------------------------------------ Iterator methods START ------------------------------------- */
     /**
-     * @see Iterator::current()
+     * Returns the current element.
+     *
+     * @see \Iterator::current()
+     * @return mixed
      */
-    public function current()
-    {
+    public function current() {
         return current($this->data);
     }
 
     /**
-     * @see Iterator::next()
+     * Move forward to next element
+     *
+     * @see \Iterator::next()
+     * @return void
      */
-    public function next()
-    {
+    public function next() {
         next($this->data);
     }
 
     /**
-     * @see Iterator::rewind()
+     * Return the key of the current element
+     *
+     * @see \Iterator::key()
+     * @return mixed
      */
-    public function rewind()
-    {
-        reset($this->data);
+    public function key() {
+        return key($this->data);
     }
 
     /**
-     * @see Iterator::valid()
+     * Checks if current position is valid
+     *
+     * @see \Iterator::valid()
+     * @return bool
      */
-    public function valid()
-    {
+    public function valid() : bool {
         return array_key_exists($this->key(), $this->data);
     }
 
     /**
-     * @see Iterator::key()
+     * Rewind the Iterator to the first element
+     *
+     * @see \Iterator::rewind()
+     * @return void
      */
-    public function key()
-    {
-        return key($this->data);
+    public function rewind() {
+        reset($this->data);
     }
     /* ------------------------------------ Iterator methods END --------------------------------------- */
 
     /* ------------------------------------ Countable methods START ------------------------------------ */
     /**
-     * @see Countable::count()
+     * Count elements of an object
+     *
+     * @see \Countable::count()
+     * @return int
      */
-    public function count()
-    {
+    public function count() : int {
         return count($this->data);
     }
     /* ------------------------------------ Countable methods END -------------------------------------- */
 
     /* ------------------------------------ JsonSerializable methods START ----------------------------- */
     /**
-     * @see JsonSerializable::jsonSerialize()
+     * Specify data which should be serialized to JSON
+     *
+     * @see \JsonSerializable::jsonSerialize()
+     * @return mixed
      */
-    public function jsonSerialize()
-    {
+    public function jsonSerialize() {
         return $this->toArray();
     }
     /* ------------------------------------ JsonSerializable methods END ------------------------------- */
@@ -633,8 +610,22 @@ abstract class AbstractCollection implements \ArrayAccess, \Iterator, \Countable
      *
      * @param array $data
      *
-     * @return $this
+     * @return \Maleficarum\Api\Collection\AbstractCollection
      */
-    abstract public function populate(array $data = []);
+    abstract public function populate(array $data = []) : \Maleficarum\Api\Collection\AbstractCollection;
     /* ------------------------------------ Abstract methods END --------------------------------------- */
+
+    /* ------------------------------------ Helper methods START --------------------------------------- */
+    /**
+     * This method is a code style helper - it will simply throw an \InvalidArgumentException
+     *
+     * @param string $msg
+     *
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    protected function respondToInvalidArgument(string $msg) {
+        throw new \InvalidArgumentException(sprintf($msg, static::class));
+    }
+    /* ------------------------------------ Helper methods END ----------------------------------------- */
 }

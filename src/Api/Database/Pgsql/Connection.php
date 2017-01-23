@@ -8,37 +8,39 @@ namespace Maleficarum\Api\Database\Pgsql;
 
 class Connection extends \Maleficarum\Api\Database\AbstractConnection
 {
+    /* ------------------------------------ AbstractConnection methods START --------------------------- */
     /**
-     * @see Maleficarum\Api\Database.AbstractConnection::getDSN()
+     * Fetch a postgresql DSN to create a connection.
+     *
+     * @see \Maleficarum\Api\Database\AbstractConnection::getDSN()
+     * @return string
      */
-    protected function getDSN()
-    {
+    protected function getDSN() : string {
         return 'pgsql:host=' . $this->getHost() . ';port=' . $this->getPort() . ';dbname=' . $this->getDbname() . ';user=' . $this->getUsername() . ';password=' . $this->getPassword();
     }
 
     /**
-     * @see Maleficarum\Api\Database\AbstractConnection::lockTable()
+     * Lock the specified table.
      *
-     * @return \Maleficarum\Api\Database\Pgsql\Connection
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @see \Maleficarum\Api\Database\AbstractConnection::lockTable()
+     *
+     * @param string $table
+     * @param string $mode
+     *
+     * @return \Maleficarum\Api\Database\AbstractConnection
      */
-    public function lockTable($table, $mode = 'ACCESS EXCLUSIVE')
-    {
-        if (!is_string($table)) {
-            throw new \InvalidArgumentException('Incorrect argument - String expected. \Maleficarum\Api\Database\Pgsql\Connection::lockTable()');
-        }
-
+    public function lockTable(string $table, string $mode = 'ACCESS EXCLUSIVE') : \Maleficarum\Api\Database\AbstractConnection {
         if (is_null($this->connection)) {
-            throw new \RuntimeException('Cannot execute DB methods prior to establishing a connection. \Maleficarum\Api\Database\Pgsql\Connection::lockTable()');
+            throw new \RuntimeException(sprintf('Cannot execute DB methods prior to establishing a connection. \%s::lockTable()', static::class));
         }
 
         if (!$this->inTransaction()) {
-            throw new \RuntimeException('No active transaction - cannot lock a table outside of a transaction scope. \Maleficarum\Api\Database\Pgsql\Connection::lockTable()');
+            throw new \RuntimeException(sprintf('No active transaction - cannot lock a table outside of a transaction scope. \%s::lockTable()', static::class));
         }
 
         $this->query('LOCK "' . $table . '" IN ' . $mode . ' MODE');
 
         return $this;
     }
+    /* ------------------------------------ AbstractConnection methods END ----------------------------- */
 }

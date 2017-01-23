@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [5.0.0] - 2017-01-23
+### Changed
+- Add return and argument types declaration
+
 ## [4.0.0] - 2017-01-10
 ### Changed
 ##### Move components listed below to the external repositories:
