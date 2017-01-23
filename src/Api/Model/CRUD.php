@@ -27,7 +27,7 @@ interface CRUD
      *
      * @return \Maleficarum\Api\Model\CRUD
      */
-    public function update() : \Maleficarum\Api\Model\CRUD;;
+    public function update() : \Maleficarum\Api\Model\CRUD;
 
     /**
      * Delete an entry from the storage based on ID data stored in this model
