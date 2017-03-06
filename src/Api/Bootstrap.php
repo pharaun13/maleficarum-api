@@ -59,7 +59,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    public function init(\Phalcon\Mvc\Micro $app, string $routesPath, float $start = 0) : \Maleficarum\Api\Bootstrap {
+    public function init(\Phalcon\Mvc\Micro $app, string $routesPath, float $start = 0.0) : \Maleficarum\Api\Bootstrap {
         return $this
             ->setUpErrorHandling()
             ->setUpProfilers($start)
@@ -89,14 +89,18 @@ class Bootstrap
         return $this;
     }
 
-
     /**
      * Bootstrap step method - set up error/exception handling.
      *
      * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpErrorHandling() : \Maleficarum\Api\Bootstrap {
-        \set_exception_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ExceptionHandler'), 'handle']);
+        /** @var \Maleficarum\Handler\Http\Strategy\JsonStrategy $strategy */
+        $strategy = \Maleficarum\Ioc\Container::get('Maleficarum\Handler\Http\Strategy\JsonStrategy');
+        /** @var \Maleficarum\Handler\Http\ExceptionHandler $handler */
+        $handler = \Maleficarum\Ioc\Container::get('Maleficarum\Handler\Http\ExceptionHandler', [$strategy]);
+
+        \set_exception_handler([$handler, 'handle']);
         \set_error_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ErrorHandler'), 'handle']);
 
         return $this;
@@ -123,7 +127,7 @@ class Bootstrap
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    private function setUpProfilers(float $start = 0) : \Maleficarum\Api\Bootstrap {
+    private function setUpProfilers(float $start = 0.0) : \Maleficarum\Api\Bootstrap {
         $this->timeProfiler = \Maleficarum\Ioc\Container::get('Maleficarum\Profiler\Time')->begin($start);
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Profiler\Time', $this->timeProfiler);
 
@@ -209,7 +213,7 @@ class Bootstrap
      * @return \Maleficarum\Api\Bootstrap
      */
     private function setUpResponse() : \Maleficarum\Api\Bootstrap {
-        $this->response = \Maleficarum\Ioc\Container::get('Maleficarum\Response\Response');
+        $this->response = \Maleficarum\Ioc\Container::get('Maleficarum\Response\Http\Response');
         \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Response', $this->response);
 
         !is_null($this->timeProfiler) && $this->timeProfiler->addMilestone('response_init', 'Response initialized.');
