@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [5.1.0] - 2017-03-06
+### Changed
+- Bump handler version
+
 ## [5.0.0] - 2017-01-23
 ### Changed
 - Add return and argument types declaration
