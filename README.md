@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [6.0.0] - 2017-03-07
+### Changed
+- Decoupled bootstrap initialization functionalities from the main bootstrap object. As of know when using the boostrap object one can and must provide a list of valid PHP callable types that will be run in order when the initialization process is executed.
+- Default bootstrap initializers were separed from the main class as static methods to be used as needed on a case-by-case basis.
+
 ## [5.1.0] - 2017-03-06
 ### Changed
 - Bump handler version
