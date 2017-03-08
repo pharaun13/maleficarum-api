@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [6.0.1] - 2017-03-07
+### Added
+- Moved internal initializers to a new namespace (transparent and backwards compatible)
+- Added internal builder definitions and a mechanism to skip their loading in specific initializers.
+
 ## [6.0.0] - 2017-03-07
 ### Changed
 - Decoupled bootstrap initialization functionalities from the main bootstrap object. As of know when using the boostrap object one can and must provide a list of valid PHP callable types that will be run in order when the initialization process is executed.
