@@ -11,7 +11,7 @@
         "maleficarum/config": "^2.0",
         "maleficarum/profiler": "^2.0",
         "maleficarum/request": "^2.0",
-        "maleficarum/http-response": "^1.0",
+        "maleficarum/http-response": "^2.0",
         "maleficarum/handler": "^3.0",
         "monolog/monolog": "^1.21"
     },

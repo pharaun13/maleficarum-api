@@ -1,7 +1,12 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [6.1.0] - 2017-03-07
+## [6.2.0] - 2017-03-08
+### Changed
+- Upgraded API to use maleficarum-http-response 2.0
+- Changed default response builder to match new http response API. 
+
+## [6.1.0] - 2017-03-08
 ### Added
 - Moved internal initializers to a new namespace (transparent and backwards compatible)
 - Added internal builder definitions and a mechanism to skip their loading in specific initializers.
