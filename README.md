@@ -1,7 +1,7 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [6.0.1] - 2017-03-07
+## [6.1.0] - 2017-03-07
 ### Added
 - Moved internal initializers to a new namespace (transparent and backwards compatible)
 - Added internal builder definitions and a mechanism to skip their loading in specific initializers.
