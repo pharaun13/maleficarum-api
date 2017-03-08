@@ -7,9 +7,9 @@ declare (strict_types=1);
 /**
  * This class contains default initializers used as Maleficarum bootstrap methods.
  */
-namespace Maleficarum\Api\Initializers;
+namespace Maleficarum\Api\Basic;
 
-class Basic {
+class Initializer {
 	/**
 	 * Set up error/exception handling.
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
@@ -62,10 +62,15 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpEnvironment(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['environment']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('environment');
+		
 		/* @var $environment \Maleficarum\Environment\Server */
 		$environment = \Maleficarum\Ioc\Container::get('Maleficarum\Environment\Server');
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Environment', $environment);
-
+		
 		// error reporting is to be enabled on all envs (non-dev ones will have errors logged into syslog)
 		error_reporting(-1);
 		
@@ -85,7 +90,7 @@ class Basic {
 		} else {
 			throw new \RuntimeException(sprintf('Unrecognised environment. \%s', __METHOD__));
 		}
-
+		
 		// return initializer name
 		return __METHOD__;
 	}
@@ -97,6 +102,12 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpConfig(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['config']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('config');
+		
+		// load config object
 		$bootstrap->setConfig(\Maleficarum\Ioc\Container::get('Maleficarum\Config\Ini\Config', ['id' => 'config.ini']));
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Config', $bootstrap->getConfig());
 
@@ -115,6 +126,12 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpRequest(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['request']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('request');
+		
+		// load request object
 		$bootstrap->setRequest(\Maleficarum\Ioc\Container::get('Maleficarum\Request\Request'));
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Request', $bootstrap->getRequest());
 
@@ -128,6 +145,12 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpResponse(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['response']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('response');
+		
+		// load response object
 		$bootstrap->setResponse(\Maleficarum\Ioc\Container::get('Maleficarum\Response\Http\Response'));
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Response', $bootstrap->getResponse());
 		
@@ -141,6 +164,12 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpLogger(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['logger']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('logger');
+		
+		// load logger object
 		$bootstrap->setLogger(\Maleficarum\Ioc\Container::get('Monolog\Logger'));
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Logger', $bootstrap->getLogger());
 
@@ -154,6 +183,12 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpQueue(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['queue']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('queue');
+		
+		// load queue object
 		$rabbitConnection = \Maleficarum\Ioc\Container::get('Maleficarum\Rabbitmq\Connection');
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\CommandQueue', $rabbitConnection);
 		
@@ -166,6 +201,11 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpDatabase(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['database']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('database');
+		
 		/** @var \Maleficarum\Api\Database\Manager $shards */
 		$shards = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Database\Manager');
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Database', $shards);
@@ -180,6 +220,11 @@ class Basic {
 	 * @return string
 	 */
 	static public function setUpSecurity(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['security']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('security');
+		
 		/** @var \Maleficarum\Api\Security\Manager $security */
 		$security = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Security\Manager');
 		$security->verify();
@@ -223,6 +268,21 @@ class Basic {
 			\Maleficarum\Ioc\Container::get('Maleficarum\Api\Controller\Fallback')->__remap('notFound');
 		});
 		
+		// return initializer name
+		return __METHOD__;
+	}
+
+	/**
+	 * Register default Controller builder function.
+	 * @param \Maleficarum\Api\Bootstrap $bootstrap
+	 * @return string
+	 */
+	static public function setUpController(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+		// load default builder if skip not requested
+		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		is_array($builders) or $builders = [];
+		isset($builders['controller']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('controller');
+
 		// return initializer name
 		return __METHOD__;
 	}

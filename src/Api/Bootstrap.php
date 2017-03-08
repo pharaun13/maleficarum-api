@@ -12,18 +12,20 @@ namespace Maleficarum\Api;
 class Bootstrap {
 
     /* ------------------------------------ Class Constant START --------------------------------------- */
-
-    const INITIALIZER_ERRORS = ['Maleficarum\Api\Initializers\Basic', 'setUpErrorHandling'];
-    const INITIALIZER_TIME_PROFILER = ['Maleficarum\Api\Initializers\Basic', 'setUpTimeProfiler'];
-    const INITIALIZER_DATABASE_PROFILER = ['Maleficarum\Api\Initializers\Basic', 'setUpDbProfiler'];
-    const INITIALIZER_ENVIRONMENT = ['Maleficarum\Api\Initializers\Basic', 'setUpEnvironment'];
-    const INITIALIZER_CONFIG = ['Maleficarum\Api\Initializers\Basic', 'setUpConfig'];
-    const INITIALIZER_REQUEST = ['Maleficarum\Api\Initializers\Basic', 'setUpRequest'];
-    const INITIALIZER_RESPONSE = ['Maleficarum\Api\Initializers\Basic', 'setUpResponse'];
-    const INITIALIZER_LOGGER = ['Maleficarum\Api\Initializers\Basic', 'setUpLogger'];
-    const INITIALIZER_QUEUE = ['Maleficarum\Api\Initializers\Basic', 'setUpQueue'];
-    const INITIALIZER_DATABASE = ['Maleficarum\Api\Initializers\Basic', 'setUpDatabase'];
-    const INITIALIZER_ROUTES = ['Maleficarum\Api\Initializers\Basic', 'setUpRoutes'];
+    
+    const INITIALIZER_ERRORS = ['Maleficarum\Api\Basic\Initializer', 'setUpErrorHandling'];
+    const INITIALIZER_TIME_PROFILER = ['Maleficarum\Api\Basic\Initializer', 'setUpTimeProfiler'];
+    const INITIALIZER_DATABASE_PROFILER = ['Maleficarum\Api\Basic\Initializer', 'setUpDbProfiler'];
+    const INITIALIZER_ENVIRONMENT = ['Maleficarum\Api\Basic\Initializer', 'setUpEnvironment'];
+    const INITIALIZER_CONFIG = ['Maleficarum\Api\Basic\Initializer', 'setUpConfig'];
+    const INITIALIZER_REQUEST = ['Maleficarum\Api\Basic\Initializer', 'setUpRequest'];
+    const INITIALIZER_RESPONSE = ['Maleficarum\Api\Basic\Initializer', 'setUpResponse'];
+    const INITIALIZER_LOGGER = ['Maleficarum\Api\Basic\Initializer', 'setUpLogger'];
+    const INITIALIZER_QUEUE = ['Maleficarum\Api\Basic\Initializer', 'setUpQueue'];
+    const INITIALIZER_DATABASE = ['Maleficarum\Api\Basic\Initializer', 'setUpDatabase'];
+    const INITIALIZER_SECURITY = ['Maleficarum\Api\Basic\Initializer', 'setUpSecurity'];
+    const INITIALIZER_ROUTES = ['Maleficarum\Api\Basic\Initializer', 'setUpRoutes'];
+    const INITIALIZER_CONTROLLER = ['Maleficarum\Api\Basic\Initializer', 'setUpController'];
     
     /* ------------------------------------ Class Constant END ----------------------------------------- */
     

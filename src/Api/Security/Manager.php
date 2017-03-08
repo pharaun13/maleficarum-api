@@ -33,7 +33,7 @@ class Manager
         if (!is_array($this->getConfig()['security'])) return $this;
         if (!is_array($this->getConfig()['security']['checks']) || !count($this->getConfig()['security']['checks'])) return $this;
         if ($this->isSkippableRoute()) return $this;
-
+        
         foreach ($this->getConfig()['security']['checks'] as $cDef) {
             // initialize check
             $check = \Maleficarum\Ioc\Container::get($cDef);
