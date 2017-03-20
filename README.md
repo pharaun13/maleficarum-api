@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [6.3.0] - 2017-03-20
+### Changed
+- Removed data structure definitions from the API project and moved them to a separate component repo.
+- Changed API to rely on the new data component.
+
 ## [6.2.0] - 2017-03-08
 ### Changed
 - Upgraded API to use maleficarum-http-response 2.0
