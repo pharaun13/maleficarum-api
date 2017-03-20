@@ -5,6 +5,7 @@ This is the Maleficarum API component implementation.
 ### Changed
 - Removed data structure definitions from the API project and moved them to a separate component repo.
 - Changed API to rely on the new data component.
+- Moved database collection/model definitions to the Api\Database namespace.
 
 ## [6.2.0] - 2017-03-08
 ### Changed
