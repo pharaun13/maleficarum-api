@@ -8,7 +8,7 @@
  * @extends \Maleficarum\Api\Collection\AbstractCollection
  */
 
-namespace Maleficarum\Api\Collection\Database;
+namespace Maleficarum\Api\Database\Collection;
 
 abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollection
 {
@@ -84,9 +84,9 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
     /**
      * Test database connection.
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      */
-    protected function populate_testDb() : \Maleficarum\Api\Collection\Database\Collection {
+    protected function populate_testDb() : \Maleficarum\Api\Database\Collection\Collection {
         if (is_null($this->getDb())) {
             throw new \RuntimeException(sprintf('Cannot populate this collection with data prior to injecting a database shard manager. \%s::populate()', static::class));
         }
@@ -99,10 +99,10 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
      *
      * @param array $data
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      * @throws \InvalidArgumentException
      */
-    protected function populate_testSorting(array $data) : \Maleficarum\Api\Collection\Database\Collection {
+    protected function populate_testSorting(array $data) : \Maleficarum\Api\Database\Collection\Collection {
         if (array_key_exists('__sorting', $data)) {
             is_array($data['__sorting']) && count($data['__sorting']) or $this->respondToInvalidArgument('Incorrect sorting data. \%s::populate()');
 
@@ -123,10 +123,10 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
      *
      * @param array $data
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      * @throws \InvalidArgumentException
      */
-    protected function populate_testSubset(array $data) : \Maleficarum\Api\Collection\Database\Collection {
+    protected function populate_testSubset(array $data) : \Maleficarum\Api\Database\Collection\Collection {
         if (array_key_exists('__subset', $data)) {
             is_array($data['__subset']) or $this->respondToInvalidArgument('Incorrect subset data. \%s::populate()');
             !isset($data['__subset']['limit']) || !is_int($data['__subset']['limit']) || $data['__subset']['limit'] < 1 and $this->respondToInvalidArgument('Incorrect subset data. \%s::populate()');
@@ -141,10 +141,10 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
      *
      * @param array $data
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      * @throws \InvalidArgumentException
      */
-    protected function populate_testLock(array $data) : \Maleficarum\Api\Collection\Database\Collection {
+    protected function populate_testLock(array $data) : \Maleficarum\Api\Database\Collection\Collection {
         if (array_key_exists('__lock', $data)) {
             $this->getDb()->fetchShard($this->getShardRoute())->isConnected() or $this->respondToInvalidArgument('Cannot lock table outside of a transaction. \%s::populate()');
             $this->getDb()->fetchShard($this->getShardRoute())->inTransaction() or $this->respondToInvalidArgument('Cannot lock table outside of a transaction. \%s::populate()');
@@ -343,9 +343,9 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
      * @param string $query
      * @param \stdClass $dto
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      */
-    protected function populate_fetchData(string $query, \stdClass $dto) : \Maleficarum\Api\Collection\Database\Collection {
+    protected function populate_fetchData(string $query, \stdClass $dto) : \Maleficarum\Api\Database\Collection\Collection {
         // fetch a shard connection
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
 
@@ -368,9 +368,9 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
     /**
      * Insert all entries in this collection to it's storage.
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      */
-    public function insertAll() : \Maleficarum\Api\Collection\Database\Collection {
+    public function insertAll() : \Maleficarum\Api\Database\Collection\Collection {
         // test database connection
         $this->populate_testDb();
 
@@ -432,9 +432,9 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
     /**
      * Delete all entries in this collection from it's storage.
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      */
-    public function deleteAll() : \Maleficarum\Api\Collection\Database\Collection {
+    public function deleteAll() : \Maleficarum\Api\Database\Collection\Collection {
         // test database connection
         $this->populate_testDb();
 
@@ -505,9 +505,9 @@ abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollectio
      * Iterate over all current data entries and perform any data formatting necessary. This method should be overloaded in any inheriting collection object
      * that requires any specific data decoding such as JSON de-serialization or date formatting.
      *
-     * @return \Maleficarum\Api\Collection\Database\Collection
+     * @return \Maleficarum\Api\Database\Collection\Collection
      */
-    protected function format() : \Maleficarum\Api\Collection\Database\Collection {
+    protected function format() : \Maleficarum\Api\Database\Collection\Collection {
         return $this;
     }
 

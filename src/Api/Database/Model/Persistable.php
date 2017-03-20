@@ -3,9 +3,9 @@
  * This class provides a basis for all persistable model objects.
  */
 
-namespace Maleficarum\Api\Model;
+namespace Maleficarum\Api\Database\Model;
 
-abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel implements \Maleficarum\Api\Model\CRUD {
+abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel implements \Maleficarum\Api\Database\Model\CRUD {
     /**
      * Use \Maleficarum\Api\Database\Dependant trait functionality.
      *
@@ -78,10 +78,10 @@ abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel impleme
     /**
      * Persist data stored in this model as a new storage entry.
      * 
-     * @see \Maleficarum\Api\Model\CRUD::create()
-     * @return \Maleficarum\Api\Model\CRUD
+     * @see \Maleficarum\Api\Database\Model\CRUD::create()
+     * @return \Maleficarum\Api\Database\Model\CRUD
      */
-    public function create() : \Maleficarum\Api\Model\CRUD {
+    public function create() : \Maleficarum\Api\Database\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -132,11 +132,11 @@ abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel impleme
     /**
      * Refresh this model with current data from the storage
      *
-     * @see \Maleficarum\Api\Model\CRUD::read()
-     * @return \Maleficarum\Api\Model\CRUD
+     * @see \Maleficarum\Api\Database\Model\CRUD::read()
+     * @return \Maleficarum\Api\Database\Model\CRUD
      * @throws \Maleficarum\Exception\NotFoundException
      */
-    public function read() : \Maleficarum\Api\Model\CRUD {
+    public function read() : \Maleficarum\Api\Database\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -161,10 +161,10 @@ abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel impleme
     /**
      * Update storage entry with data currently stored in this model.
      *
-     * @see \Maleficarum\Api\Model\CRUD::update()
-     * @return \Maleficarum\Api\Model\CRUD
+     * @see \Maleficarum\Api\Database\Model\CRUD::update()
+     * @return \Maleficarum\Api\Database\Model\CRUD
      */
-    public function update() : \Maleficarum\Api\Model\CRUD {
+    public function update() : \Maleficarum\Api\Database\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -205,10 +205,10 @@ abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel impleme
     /**
      * Delete an entry from the storage based on ID data stored in this model
      *
-     * @see \Maleficarum\Api\Model\CRUD::delete()
-     * @return \Maleficarum\Api\Model\CRUD
+     * @see \Maleficarum\Api\Database\Model\CRUD::delete()
+     * @return \Maleficarum\Api\Database\Model\CRUD
      */
-    public function delete() : \Maleficarum\Api\Model\CRUD {
+    public function delete() : \Maleficarum\Api\Database\Model\CRUD {
         // connect to shard if necessary
         $shard = $this->getDb()->fetchShard($this->getShardRoute());
         $shard->isConnected() or $shard->connect();
@@ -229,7 +229,7 @@ abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel impleme
      * 
      * @param bool $clear
      *
-     * @see \Maleficarum\Api\Model\CRUD::validate()
+     * @see \Maleficarum\Api\Database\Model\CRUD::validate()
      * @return bool
      */
     abstract public function validate(bool $clear = true) : bool;
