@@ -1,16 +1,11 @@
 <?php
 /**
  * This class provides a basis for all persistable model objects.
- *
- * @extends \Maleficarum\Api\Model\AbstractModel
- *
- * @implements \Maleficarum\Api\Model\iCRUD
  */
 
 namespace Maleficarum\Api\Model;
 
-abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implements \Maleficarum\Api\Model\CRUD
-{
+abstract class Persistable extends \Maleficarum\Data\Model\AbstractModel implements \Maleficarum\Api\Model\CRUD {
     /**
      * Use \Maleficarum\Api\Database\Dependant trait functionality.
      *
@@ -56,11 +51,9 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
     /* ------------------------------------ Persistable methods END -------------------------------------- */
 
     /* ------------------------------------ AbstractModel methods START ---------------------------------- */
+    
     /**
-     * Fetch the currently assigned unique ID.
-     * 
-     * @see \Maleficarum\Api\Model\Identifiable::getId()
-     * @return mixed
+     * @see \Maleficarum\Data\Model\AbstractModel.getId()
      */
     public function getId() {
         $method = 'get' . ucfirst($this->getModelPrefix()) . 'Id';
@@ -69,20 +62,19 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
     }
 
     /**
-     * Set a unique ID for this object.
-     * 
-     * @see \Maleficarum\Api\Model\Identifiable::setId()
-     * @return \Maleficarum\Api\Model\Identifiable
+     * @see \Maleficarum\Data\Model\AbstractModel.setId()
      */
-    public function setId($id) : \Maleficarum\Api\Model\Identifiable {
+    public function setId($id) : \Maleficarum\Data\Model\AbstractModel {
         $method = 'set' . ucfirst($this->getModelPrefix()) . 'Id';
         $this->$method($id);
 
         return $this;
     }
+    
     /* ------------------------------------ AbstractModel methods END ------------------------------------ */
 
     /* ------------------------------------ CRUD methods START ------------------------------------------- */
+    
     /**
      * Persist data stored in this model as a new storage entry.
      * 
@@ -241,9 +233,11 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
      * @return bool
      */
     abstract public function validate(bool $clear = true) : bool;
+    
     /* ------------------------------------ CRUD methods END --------------------------------------------- */
 
     /* ------------------------------------ Abstract methods START ------------------------------------- */
+    
     /**
      * Fetch the name of current shard.
      *
@@ -264,5 +258,6 @@ abstract class Persistable extends \Maleficarum\Api\Model\AbstractModel implemen
      * @return string
      */
     abstract protected function getModelPrefix() : string;
+    
     /* ------------------------------------ Abstract methods END --------------------------------------- */
 }

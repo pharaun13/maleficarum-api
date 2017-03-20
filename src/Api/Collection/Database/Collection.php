@@ -10,7 +10,7 @@
 
 namespace Maleficarum\Api\Collection\Database;
 
-abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
+abstract class Collection extends \Maleficarum\Data\Collection\AbstractCollection
 {
     /**
      * Use \Maleficarum\Api\Database\Dependant trait functionality.
@@ -39,9 +39,9 @@ abstract class Collection extends \Maleficarum\Api\Collection\AbstractCollection
      *
      * @param array $data
      *
-     * @return \Maleficarum\Api\Collection\AbstractCollection
+     * @return \Maleficarum\Data\Collection\AbstractCollection
      */
-    public function populate(array $data = []) : \Maleficarum\Api\Collection\AbstractCollection {
+    public function populate(array $data = []) : \Maleficarum\Data\Collection\AbstractCollection {
         // apply initial tests
         $this->populate_testDb()->populate_testLock($data)->populate_testSorting($data)->populate_testSubset($data);
 
