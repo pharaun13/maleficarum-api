@@ -13,8 +13,6 @@
         "maleficarum/request": "^2.0",
         "maleficarum/http-response": "^2.0",
         "maleficarum/handler": "^3.0",
-        "maleficarum/data": "^1.0",
-        "maleficarum/database": "^1.0",
         "monolog/monolog": "^1.21"
     },
     "require-dev": {
@@ -62,14 +60,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:pharaun13/maleficarum-handler.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-data.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-database.git"
         }
     ]
 }
