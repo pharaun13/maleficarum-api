@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [7.0.0] - 2017-03-22
+### Changed
+- Removed any database specific functionality from the API project.
+- Added a reliance on a specific maleficarum-database component for database functionalities.
+
 ## [6.3.0] - 2017-03-20
 ### Changed
 - Removed data structure definitions from the API project and moved them to a separate component repo.

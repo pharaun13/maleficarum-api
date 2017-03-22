@@ -206,8 +206,8 @@ class Initializer {
 		is_array($builders) or $builders = [];
 		isset($builders['database']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('database');
 		
-		/** @var \Maleficarum\Api\Database\Manager $shards */
-		$shards = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Database\Manager');
+		/** @var \Maleficarum\Database\Shard\Manager $shards */
+		$shards = \Maleficarum\Ioc\Container::get('Maleficarum\Database\Shard\Manager');
 		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Database', $shards);
 
 		// return initializer name
