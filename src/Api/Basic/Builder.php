@@ -233,13 +233,13 @@ class Builder {
 						$data['start'], 
 						$data['end'],
 						$data['queryString'], 
-						$data['boundParams']
+						$data['params']
 					);
 				});
 			}
 			
 			$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			$pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ['Maleficarum\Database\Statement\Trailable', $args]);
+			$pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ['Maleficarum\Database\PDO\Statement\Profiled', $args]);
 			
 			return $pdo;
 		});
