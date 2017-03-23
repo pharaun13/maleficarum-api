@@ -14,8 +14,6 @@ class Bootstrap {
     /* ------------------------------------ Class Constant START --------------------------------------- */
     
     const INITIALIZER_ERRORS = ['Maleficarum\Api\Basic\Initializer', 'setUpErrorHandling'];
-    const INITIALIZER_TIME_PROFILER = ['Maleficarum\Api\Basic\Initializer', 'setUpTimeProfiler'];
-    const INITIALIZER_DATABASE_PROFILER = ['Maleficarum\Api\Basic\Initializer', 'setUpDbProfiler'];
     const INITIALIZER_ENVIRONMENT = ['Maleficarum\Api\Basic\Initializer', 'setUpEnvironment'];
     const INITIALIZER_CONFIG = ['Maleficarum\Api\Basic\Initializer', 'setUpConfig'];
     const INITIALIZER_REQUEST = ['Maleficarum\Api\Basic\Initializer', 'setUpRequest'];
