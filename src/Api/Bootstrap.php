@@ -14,16 +14,16 @@ class Bootstrap {
     /* ------------------------------------ Class Constant START --------------------------------------- */
     
     const INITIALIZER_ERRORS = ['Maleficarum\Api\Basic\Initializer', 'setUpErrorHandling'];
-    const INITIALIZER_ENVIRONMENT = ['Maleficarum\Api\Basic\Initializer', 'setUpEnvironment'];
-    const INITIALIZER_CONFIG = ['Maleficarum\Api\Basic\Initializer', 'setUpConfig'];
-    const INITIALIZER_REQUEST = ['Maleficarum\Api\Basic\Initializer', 'setUpRequest'];
-    const INITIALIZER_RESPONSE = ['Maleficarum\Api\Basic\Initializer', 'setUpResponse'];
-    const INITIALIZER_LOGGER = ['Maleficarum\Api\Basic\Initializer', 'setUpLogger'];
-    const INITIALIZER_QUEUE = ['Maleficarum\Api\Basic\Initializer', 'setUpQueue'];
-    
     const INITIALIZER_SECURITY = ['Maleficarum\Api\Basic\Initializer', 'setUpSecurity'];
     const INITIALIZER_ROUTES = ['Maleficarum\Api\Basic\Initializer', 'setUpRoutes'];
     const INITIALIZER_CONTROLLER = ['Maleficarum\Api\Basic\Initializer', 'setUpController'];
+    const INITIALIZER_DEBUG_LEVEL = ['Maleficarum\Api\Basic\Initializer', 'setUpDebugLevel'];
+    
+    
+    
+    
+    const INITIALIZER_LOGGER = ['Maleficarum\Api\Basic\Initializer', 'setUpLogger'];
+    const INITIALIZER_QUEUE = ['Maleficarum\Api\Basic\Initializer', 'setUpQueue'];
     
     /* ------------------------------------ Class Constant END ----------------------------------------- */
     
@@ -35,48 +35,6 @@ class Bootstrap {
      * @var array
      */
     private $initializers = [];
-    
-    /**
-     * Internal storage for the config object
-     *
-     * @var \Maleficarum\Config\AbstractConfig|null
-     */
-    private $config = null;
-
-    /**
-     * Internal storage for the time profiler
-     *
-     * @var \Maleficarum\Profiler\Time|null
-     */
-    private $timeProfiler = null;
-
-    /**
-     * Internal storage for the database profiler
-     *
-     * @var \Maleficarum\Profiler\Database|null
-     */
-    private $dbProfiler = null;
-
-    /**
-     * Internal storage for the request object
-     *
-     * @var \Maleficarum\Request\Request
-     */
-    private $request = null;
-
-    /**
-     * Internal storage for the response object
-     *
-     * @var \Maleficarum\Response\Response
-     */
-    private $response = null;
-
-    /**
-     * Internal storage for logger object
-     *
-     * @var \Psr\Log\LoggerInterface|null
-     */
-    private $logger = null;
     
     /**
      * Internal storage for bootstrap initializer param container.
@@ -97,10 +55,14 @@ class Bootstrap {
         
         // validate and execute initializers
         foreach ($this->getInitializers() as $key => $initializer) {
-            if (!is_callable($initializer)) throw new \LogicException(sprintf('Invalid initializer passed to the bootstrap initialization process. \%s::\%s()', static::class, __METHOD__));
+            if (!is_callable($initializer)) {
+                var_dump(class_exists('\Maleficarum\Response\Initializer\Initializer'));
+                var_dump($initializer); exit;} //throw new \LogicException(sprintf('Invalid initializer passed to the bootstrap initialization process. \%s::\%s()', static::class, __METHOD__));
             $init_name = $initializer($this->getParamContainer());
 
-            !is_null($this->getTimeProfiler()) && $this->getTimeProfiler()->addMilestone('initializer_'.$key, 'Initializer executed ('.$init_name.').');
+            try {
+                \Maleficarum\Ioc\Container::getDependency('Maleficarum\Profiler\Time')->addMilestone('initializer_'.$key, 'Initializer executed ('.$init_name.').');
+            } catch (\RuntimeException $e) {}
         }
         
         return $this;
@@ -113,10 +75,14 @@ class Bootstrap {
      */
     public function conclude() : \Maleficarum\Api\Bootstrap {
         // complete profiling
-        is_null($this->getTimeProfiler()) or $this->getTimeProfiler()->end();
+        try {
+            \Maleficarum\Ioc\Container::getDependency('Maleficarum\Profiler\Time')->end();
+        } catch (\RuntimeException $e) {}
 
         // output any response data
-        is_null($this->getResponse()) or $this->getResponse()->output();
+        try {
+            \Maleficarum\Ioc\Container::getDependency('Maleficarum\Response')->output();
+        } catch (\RuntimeException $e) {}
 
         return $this;
     }
@@ -138,103 +104,7 @@ class Bootstrap {
         $this->initializers = $initializers;
         return $this;
     }
-
-    /**
-     * @return \Maleficarum\Profiler\Time|null
-     */
-    public function getTimeProfiler() {
-        return $this->timeProfiler;
-    }
-
-    /**
-     * @param  $timeProfiler
-     * @return \Maleficarum\Api\Bootstrap
-     */
-    public function setTimeProfiler(\Maleficarum\Profiler\Time $timeProfiler = null) : \Maleficarum\Api\Bootstrap {
-        $this->timeProfiler = $timeProfiler;
-        return $this;
-    }
-
-    /**
-     * @return \Maleficarum\Profiler\Database|null
-     */
-    public function getDbProfiler() {
-        return $this->dbProfiler;
-    }
     
-    /**
-     * @param \Maleficarum\Profiler\Database $dbProfiler
-     * @return \Maleficarum\Api\Bootstrap
-     */
-    public function setDbProfiler(\Maleficarum\Profiler\Database $dbProfiler = null) : \Maleficarum\Api\Bootstrap {
-        $this->dbProfiler = $dbProfiler;
-        return $this;
-    }
-
-    /**
-     * @return \Maleficarum\Config\AbstractConfig|null
-     */
-    public function getConfig() {
-        return $this->config;
-    }
-    
-    /**
-     * @param \Maleficarum\Config\AbstractConfig $config
-     * @return \Maleficarum\Api\Bootstrap
-     */
-    public function setConfig(\Maleficarum\Config\AbstractConfig $config = null) : \Maleficarum\Api\Bootstrap {
-        $this->config = $config;
-        return $this;
-    }
-
-    /**
-     * @return \Maleficarum\Request\Request|null
-     */
-    public function getRequest() {
-        return $this->request;
-    }
-    
-    /**
-     * @param \Maleficarum\Request\Request $request
-     * @return \Maleficarum\Api\Bootstrap
-     */
-    public function setRequest(\Maleficarum\Request\Request $request = null ) : \Maleficarum\Api\Bootstrap {
-        $this->request = $request;
-        return $this;
-    }
-
-    /**
-     * @return \Maleficarum\Response\Response
-     */
-    public function getResponse() {
-        return $this->response;
-    }
-    
-    /**
-     * @param \Maleficarum\Response\AbstractResponse $response
-     * @return \Maleficarum\Api\Bootstrap
-     */
-    public function setResponse(\Maleficarum\Response\AbstractResponse $response = null) : \Maleficarum\Api\Bootstrap {
-        $this->response = $response;
-        return $this;
-    }
-    
-    /**
-     * @return null|\Psr\Log\LoggerInterface
-     */
-    public function getLogger() {
-        return $this->logger;
-    }
-
-    /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @return \Maleficarum\Api\Bootstrap
-     */
-    public function setLogger(\Psr\Log\LoggerInterface $logger = null) : \Maleficarum\Api\Bootstrap {
-        $this->logger = $logger;
-        return $this;
-    }
-
     /**
      * @return array
      */

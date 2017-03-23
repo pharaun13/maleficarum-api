@@ -1,119 +1,12 @@
 <?php
 /**
- * PHP 7.0 compatible
+ * This class contains default initializers used as Maleficarum bootstrap methods.
  */
 declare (strict_types=1);
 
-/**
- * This class contains default initializers used as Maleficarum bootstrap methods.
- */
 namespace Maleficarum\Api\Basic;
 
 class Initializer {
-	/**
-	 * Detect application environment.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @throws \RuntimeException
-	 * @return string
-	 */
-	static public function setUpEnvironment(array $opts = []) : string {
-		die(__METHOD__);
-		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
-		is_array($builders) or $builders = [];
-		isset($builders['environment']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('environment');
-		
-		/* @var $environment \Maleficarum\Environment\Server */
-		$environment = \Maleficarum\Ioc\Container::get('Maleficarum\Environment\Server');
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Environment', $environment);
-		
-		// error reporting is to be enabled on all envs (non-dev ones will have errors logged into syslog)
-		error_reporting(-1);
-		
-		// fetch current env
-		$environment = $environment->getCurrentEnvironment();
-		
-		// set handler debug level and error display value based on env
-		if (in_array($environment, ['local', 'development', 'staging'])) {
-			\Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_FULL);
-			ini_set('display_errors', '1');
-		} elseif ('uat' === $environment) {
-			\Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_LIMITED);
-			ini_set('display_errors', '0');
-		} elseif ('production' === $environment) {
-			\Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_CRUCIAL);
-			ini_set('display_errors', '0');
-		} else {
-			throw new \RuntimeException(sprintf('Unrecognised environment. \%s', __METHOD__));
-		}
-		
-		// return initializer name
-		return __METHOD__;
-	}
-
-	/**
-	 * Prepare, load and register the config object.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @throws \RuntimeException
-	 * @return string
-	 */
-	static public function setUpConfig(array $opts = []) : string {
-		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
-		is_array($builders) or $builders = [];
-		isset($builders['config']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('config');
-		
-		// load config object
-		$bootstrap->setConfig(\Maleficarum\Ioc\Container::get('Maleficarum\Config\Ini\Config', ['id' => 'config.ini']));
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Config', $bootstrap->getConfig());
-
-		// check the disabled/enabled switch
-		$config = $bootstrap->getConfig();
-		if (!isset($config['global']['enabled']) || (!$config['global']['enabled'])) throw new \RuntimeException(sprintf('Application disabled! \%s()', __METHOD__));
-
-		// return initializer name
-		return __METHOD__;
-	}
-
-	/**
-	 * Prepare and register the request object.
-	 *
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpRequest(array $opts = []) : string {
-		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
-		is_array($builders) or $builders = [];
-		isset($builders['request']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('request');
-		
-		// load request object
-		$bootstrap->setRequest(\Maleficarum\Ioc\Container::get('Maleficarum\Request\Request'));
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Request', $bootstrap->getRequest());
-
-		// return initializer name
-		return __METHOD__;
-	}
-
-	/**
-	 * Prepare and register the response object.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpResponse(array $opts = []) : string {
-		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
-		is_array($builders) or $builders = [];
-		isset($builders['response']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('response');
-		
-		// load response object
-		$bootstrap->setResponse(\Maleficarum\Ioc\Container::get('Maleficarum\Response\Http\Response'));
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Response', $bootstrap->getResponse());
-		
-		// return initializer name
-		return __METHOD__;
-	}
-
 	/**
 	 * Set up logger object.
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
@@ -121,13 +14,12 @@ class Initializer {
 	 */
 	static public function setUpLogger(array $opts = []) : string {
 		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		$builders = $opts['builders'] ?? [];
 		is_array($builders) or $builders = [];
 		isset($builders['logger']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('logger');
 		
 		// load logger object
-		$bootstrap->setLogger(\Maleficarum\Ioc\Container::get('Monolog\Logger'));
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Logger', $bootstrap->getLogger());
+		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Logger', \Maleficarum\Ioc\Container::get('Monolog\Logger'));
 
 		// return initializer name
 		return __METHOD__;
@@ -151,24 +43,6 @@ class Initializer {
 		// return initializer name
 		return __METHOD__;
 	}
-	/**
-	 * Prepare and register database shard manager.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpDatabase(array $opts = []) : string {
-		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
-		is_array($builders) or $builders = [];
-		isset($builders['database']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('database');
-		
-		/** @var \Maleficarum\Database\Shard\Manager $shards */
-		$shards = \Maleficarum\Ioc\Container::get('Maleficarum\Database\Shard\Manager');
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Database', $shards);
-
-		// return initializer name
-		return __METHOD__;
-	}
 
 	/* ------------------------------------ Class Methods START ---------------------------------------- */
 
@@ -185,6 +59,38 @@ class Initializer {
 
 		\set_exception_handler([$handler, 'handle']);
 		\set_error_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ErrorHandler'), 'handle']);
+
+		// return initializer name
+		return __METHOD__;
+	}
+	
+	/**
+	 * Detect application environment.
+	 * @param array $opts
+	 * @throws \RuntimeException
+	 * @return string
+	 */
+	static public function setUpDebugLevel(array $opts = []) : string {
+		try {
+			$environment = \Maleficarum\Ioc\Container::getDependency('Maleficarum\Environment');
+			$environment = $environment->getCurrentEnvironment();
+		} catch (\Exception $e) {
+			throw new \RuntimeException(sprintf('Environment object not initialized. \%s', __METHOD__));
+		}
+		
+		// set handler debug level and error display value based on env
+		if (in_array($environment, ['local', 'development', 'staging'])) {
+			\Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_FULL);
+			ini_set('display_errors', '1');
+		} elseif ('uat' === $environment) {
+			\Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_LIMITED);
+			ini_set('display_errors', '0');
+		} elseif ('production' === $environment) {
+			\Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_CRUCIAL);
+			ini_set('display_errors', '0');
+		} else {
+			throw new \RuntimeException(sprintf('Unrecognised environment. \%s', __METHOD__));
+		}
 		
 		// return initializer name
 		return __METHOD__;
@@ -192,12 +98,12 @@ class Initializer {
 	
 	/**
 	 * Prepare and register the security object.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
+	 * @param array $opts
 	 * @return string
 	 */
 	static public function setUpSecurity(array $opts = []) : string {
 		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		$builders = $opts['builders'] ?? [];
 		is_array($builders) or $builders = [];
 		isset($builders['security']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('security');
 		
@@ -211,20 +117,26 @@ class Initializer {
 
 	/**
 	 * Bootstrap step method - prepare and register application routes.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
+	 * @param array $opts
 	 * @throws \RuntimeException
 	 * @return string
 	 */
 	static public function setUpRoutes(array $opts = []) : string {
+		try {
+			$request = \Maleficarum\Ioc\Container::getDependency('Maleficarum\Request');
+		} catch (\RuntimeException $e) {
+			throw new \RuntimeException(sprintf('Request object not initialized. \%s', __METHOD__));
+		}
+		
 		// validate input container
-		$app = $bootstrap->getParamContainer()['app'] ?? null;
-		$routesPath = $bootstrap->getParamContainer()['routes'] ?? null;
+		$app = $opts['app'] ?? null;
+		$routesPath = $opts['routes'] ?? null;
 		
 		if (!is_object($app)) throw new \RuntimeException(sprintf('Phalcon application not defined for bootstrap. \%s()', __METHOD__));
 		if (!is_readable($routesPath)) throw new \RuntimeException(sprintf('Routes path not readable. \%s()', __METHOD__));
 
 		// include outside routes
-		$route = explode('?', strtolower($bootstrap->getRequest()->getURI()))[0];
+		$route = explode('?', strtolower($request->getUri()))[0];
 		$route = explode('/', preg_replace('/^\//', '', $route));
 		$route = ucfirst(array_shift($route));
 
@@ -235,7 +147,6 @@ class Initializer {
 
 		$path = $routesPath . DIRECTORY_SEPARATOR . $route . '.php';
 		if (is_readable($path)) {
-			$request = $bootstrap->getRequest();
 			require_once $path;
 		}
 
@@ -250,12 +161,12 @@ class Initializer {
 
 	/**
 	 * Register default Controller builder function.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
+	 * @param array $opts
 	 * @return string
 	 */
-	static public function setUpController(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpController(array $opts = []) : string {
 		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
+		$builders = $opts['builders'] ?? [];
 		is_array($builders) or $builders = [];
 		isset($builders['controller']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('controller');
 

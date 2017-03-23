@@ -2,63 +2,48 @@
 /**
  * This class provides Dependency Injection functionality to CodeIgniter controllers. All app specific functionality
  * should be implemented in this or inheriting classes. This way we can easily move to other frameworks one day (hopefully Zend)
- *
- * @abstract
- *
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Api\Controller;
 
-abstract class Generic
-{
+abstract class Generic {
+    
+    /* ------------------------------------ Class Traits START ----------------------------------------- */
+    
     /**
-     * Use \Maleficarum\Config\Dependant functionality.
-     *
-     * @trait
+     * \Maleficarum\Config\Dependant
      */
     use \Maleficarum\Config\Dependant;
 
     /**
-     * Use \Maleficarum\Environment\Dependant functionality.
-     *
-     * @trait
+     * \Maleficarum\Environment\Dependant
      */
     use \Maleficarum\Environment\Dependant;
 
     /**
-     * Use \Maleficarum\Profiler\Dependant functionality.
-     *
-     * @trait
-     */
-    use \Maleficarum\Profiler\Dependant;
-
-    /**
-     * Use \Maleficarum\Request\Dependant functionality.
-     *
-     * @trait
+     * \Maleficarum\Request\Dependant
      */
     use \Maleficarum\Request\Dependant;
 
     /**
-     * Use \Maleficarum\Response\Dependant functionality.
-     *
-     * @trait
+     * \Maleficarum\Response\Dependant
      */
     use \Maleficarum\Response\Dependant;
 
     /**
-     * Use \Maleficarum\Api\Logger\Dependant functionality.
-     *
-     * @trait
+     * \Maleficarum\Api\Logger\Dependant
      */
     use \Maleficarum\Api\Logger\Dependant;
+    
+    /* ------------------------------------ Class Traits END ------------------------------------------- */
 
-    /* ------------------------------------ Generic methods START -------------------------------------- */
+    /* ------------------------------------ Class Methods START ---------------------------------------- */
+    
     /**
      * Perform URL to class method remapping.
      *
      * @param string $method
-     *
      * @return mixed
      * @throws \Maleficarum\Exception\NotFoundException
      */
@@ -78,7 +63,6 @@ abstract class Generic
      * Immediately halt all actions and send a 400 Bad Request response with provided errors.
      *
      * @param array $errors
-     *
      * @return void
      * @throws \Maleficarum\Exception\BadRequestException
      */
@@ -90,7 +74,6 @@ abstract class Generic
      * Immediately halt all actions and send a 409 Conflict response with provided errors.
      *
      * @param array $errors
-     *
      * @return void
      * @throws \Maleficarum\Exception\ConflictException
      */
@@ -102,12 +85,13 @@ abstract class Generic
      * Immediately halt all actions and send a 404 Not found response.
      *
      * @param string $message
-     *
      * @return void
      * @throws \Maleficarum\Exception\NotFoundException
      */
     protected function respondToNotFound(string $message) {
         throw new \Maleficarum\Exception\NotFoundException($message);
     }
-    /* ------------------------------------ Generic methods END ---------------------------------------- */
+    
+    /* ------------------------------------ Class Methods END ------------------------------------------ */
+    
 }

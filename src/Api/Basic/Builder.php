@@ -14,14 +14,9 @@ class Builder {
 	/* ------------------------------------ Class Constant START --------------------------------------- */
 	
 	const builderList = [
-		'config',
-	    'environment',
-	    'request',
-	    'security',
+		'security',
+		'controller',
 	    'logger',
-	    'response',
-	    'database',
-	    'controller',
 	    'queue'
 	];
 
@@ -42,46 +37,6 @@ class Builder {
 		return $this;
 	}
 	
-	/**
-	 * Register config builders.
-	 * @param array $opts
-	 * @return \Maleficarum\Api\Basic\Builder
-	 */
-	private function registerConfig(array $opts = []) : \Maleficarum\Api\Basic\Builder {
-		\Maleficarum\Ioc\Container::register('Maleficarum\Config\Ini\Config', function ($dep, $opts) {
-			$file = CONFIG_PATH . DIRECTORY_SEPARATOR . $dep['Maleficarum\Environment']->getCurrentEnvironment() . DIRECTORY_SEPARATOR . $opts['id'];
-			return (new \Maleficarum\Config\Ini\Config($file));
-		});
-		
-		return $this;
-	}
-
-	/**
-	 * Register environment builders.
-	 * @param array $opts
-	 * @return \Maleficarum\Api\Basic\Builder
-	 */
-	private function registerEnvironment(array $opts = []) : \Maleficarum\Api\Basic\Builder {
-		\Maleficarum\Ioc\Container::register('Maleficarum\Environment\Server', function () {
-			return (new \Maleficarum\Environment\Server($_SERVER));
-		});
-		
-		return $this;
-	}
-
-	/**
-	 * Register request builders.
-	 * @param array $opts
-	 * @return \Maleficarum\Api\Basic\Builder
-	 */
-	private function registerRequest(array $opts = []) : \Maleficarum\Api\Basic\Builder {
-		\Maleficarum\Ioc\Container::register('Maleficarum\Request\Request', function () {
-			return (new \Maleficarum\Request\Request(new \Phalcon\Http\Request, \Maleficarum\Request\Request::PARSER_JSON));
-		});
-		
-		return $this;
-	}
-
 	/**
 	 * Register security builders.
 	 * @param array $opts
@@ -113,140 +68,7 @@ class Builder {
 		
 		return $this;
 	}
-
-	/**
-	 * Register response builders.
-	 * @param array $opts
-	 * @return \Maleficarum\Api\Basic\Builder
-	 */
-	private function registerResponse(array $opts = []) : \Maleficarum\Api\Basic\Builder {
-		\Maleficarum\Ioc\Container::register('Maleficarum\Response\Http\Response', function ($dep) {
-			/** @var \Maleficarum\Response\Handler\JsonHandler $responseHandler */
-			$responseHandler = \Maleficarum\Ioc\Container::get('Maleficarum\Response\Http\Handler\JsonHandler');
-
-			// add version plugin
-			if (isset($dep['Maleficarum\Config'])) {
-				$version = isset($dep['Maleficarum\Config']['global']['version']) ? $dep['Maleficarum\Config']['global']['version'] : null;
-				$responseHandler->addPlugin(
-					'version',
-					function() use ($version) { return $version; }
-				);
-			}
-
-			// add profiler plugins on internal envs 
-			if (isset($dep['Maleficarum\Environment']) && in_array($dep['Maleficarum\Environment']->getCurrentEnvironment(), ['local', 'development', 'staging'])) {
-				$profiler = $dep['Maleficarum\Profiler\Time'] ?? null;
-				is_null($profiler) or $responseHandler->addPlugin(
-					'time_profiler',
-					function() use ($profiler) {
-						$profiler->isComplete() or $profiler->end();
-						return [
-							'exec_time' => $profiler->getProfile(),
-							'req_per_s' => $profiler->getProfile() > 0 ? round(1 / $profiler->getProfile(), 2) : 0,
-						];
-					}
-				);
-				
-				$profiler = $dep['Maleficarum\Profiler\Database'] ?? null;
-				is_null($profiler) or $responseHandler->addPlugin(
-					'database_profiler',
-					function() use ($profiler) {
-						$count = $exec = 0;
-						foreach ($profiler as $key => $profile) {
-							$count++;
-							$exec += $profile['execution'];
-						}
-
-						return [
-							'query_count' => $count,
-							'overall_query_exec_time' => $exec
-						];
-					}
-				);
-			}
-
-			$resp = (new \Maleficarum\Response\Http\Response(new \Phalcon\Http\Response, $responseHandler));
-			return $resp;
-		});
-		
-		return $this;
-	}
-
-	/**
-	 * Register database builders.
-	 * @param array $opts
-	 * @return \Maleficarum\Api\Basic\Builder
-	 */
-	private function registerDatabase(array $opts = []) : \Maleficarum\Api\Basic\Builder {
-		\Maleficarum\Ioc\Container::register('Maleficarum\Database\Shard\Manager', function ($dep) {
-			$manager = new \Maleficarum\Database\Shard\Manager();
-
-			// check shard list
-			if (!isset($dep['Maleficarum\Config']['database']['shards']) || !count($dep['Maleficarum\Config']['database']['shards'])) {
-				throw new \RuntimeException('Cannot set up database access - no shards are defined.');
-			}
-
-			// create shard connections
-			$shards = [];
-			foreach ($dep['Maleficarum\Config']['database']['shards'] as $shard) {
-				if (!isset($dep['Maleficarum\Config']['database_shards'][$shard]) || !count($dep['Maleficarum\Config']['database_shards'][$shard])) {
-					throw new \RuntimeException('No config defined for the shard: ' . $shard);
-				}
-				$cfg = $dep['Maleficarum\Config']['database_shards'][$shard];
-				$shards[$shard] = \Maleficarum\Ioc\Container::get('Maleficarum\Database\Shard\Connection\Pgsql\Connection');
-				$shards[$shard]
-					->setHost($cfg['host'])
-					->setPort((int)$cfg['port'])
-					->setDbname($cfg['dbName'])
-					->setUsername($cfg['user'])
-					->setPassword($cfg['password']);
-			}
-
-			// check routes
-			if (!isset($dep['Maleficarum\Config']['database']['routes']) || !count($dep['Maleficarum\Config']['database']['routes'])) {
-				throw new \RuntimeException('Cannot set up database access - no shard routes are defined.');
-			}
-			if (!array_key_exists(\Maleficarum\Database\Shard\Manager::DEFAULT_ROUTE, $dep['Maleficarum\Config']['database']['routes'])) {
-				throw new \RuntimeException('Cannot set up database access - default route is not defined.');
-			}
-
-			// attach shards to routes
-			foreach ($dep['Maleficarum\Config']['database']['routes'] as $route => $shard) {
-				$manager->attachShard($shards[$shard], $route);
-			}
-
-			return $manager;
-		});
-
-		\Maleficarum\Ioc\Container::register('Maleficarum\Database\Shard\Connection\Pgsql\Connection', function () {
-			return (new \Maleficarum\Database\Shard\Connection\Pgsql\Connection());
-		});
-
-		\Maleficarum\Ioc\Container::register('PDO', function ($dep, $opts) {
-			$pdo = new \PDO($opts['dsn']);
-			
-			$args = [$pdo];
-			if (isset($dep['Maleficarum\Profiler\Database'])) {
-				$profiler = $dep['Maleficarum\Profiler\Database'];
-				array_push($args, function (array $data) use ($profiler){
-					$profiler->addQuery(
-						$data['start'], 
-						$data['end'],
-						$data['queryString'], 
-						$data['params']
-					);
-				});
-			}
-			
-			$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-			$pdo->setAttribute(\PDO::ATTR_STATEMENT_CLASS, ['Maleficarum\Database\PDO\Statement\Profiled', $args]);
-			
-			return $pdo;
-		});
-		
-		return $this;
-	}
-
+	
 	/**
 	 * Register controller builders.
 	 * @param array $opts
