@@ -18,10 +18,6 @@ class Bootstrap {
     const INITIALIZER_ROUTES = ['Maleficarum\Api\Basic\Initializer', 'setUpRoutes'];
     const INITIALIZER_CONTROLLER = ['Maleficarum\Api\Basic\Initializer', 'setUpController'];
     const INITIALIZER_DEBUG_LEVEL = ['Maleficarum\Api\Basic\Initializer', 'setUpDebugLevel'];
-    
-    
-    
-    
     const INITIALIZER_LOGGER = ['Maleficarum\Api\Basic\Initializer', 'setUpLogger'];
     const INITIALIZER_QUEUE = ['Maleficarum\Api\Basic\Initializer', 'setUpQueue'];
     
@@ -55,9 +51,7 @@ class Bootstrap {
         
         // validate and execute initializers
         foreach ($this->getInitializers() as $key => $initializer) {
-            if (!is_callable($initializer)) {
-                var_dump(class_exists('\Maleficarum\Response\Initializer\Initializer'));
-                var_dump($initializer); exit;} //throw new \LogicException(sprintf('Invalid initializer passed to the bootstrap initialization process. \%s::\%s()', static::class, __METHOD__));
+            if (!is_callable($initializer)) throw new \LogicException(sprintf('Invalid initializer passed to the bootstrap initialization process. \%s::\%s()', static::class, __METHOD__));
             $init_name = $initializer($this->getParamContainer());
 
             try {
