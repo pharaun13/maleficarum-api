@@ -22,7 +22,7 @@ class Bootstrap {
     const INITIALIZER_RESPONSE = ['Maleficarum\Api\Basic\Initializer', 'setUpResponse'];
     const INITIALIZER_LOGGER = ['Maleficarum\Api\Basic\Initializer', 'setUpLogger'];
     const INITIALIZER_QUEUE = ['Maleficarum\Api\Basic\Initializer', 'setUpQueue'];
-    const INITIALIZER_DATABASE = ['Maleficarum\Api\Basic\Initializer', 'setUpDatabase'];
+    
     const INITIALIZER_SECURITY = ['Maleficarum\Api\Basic\Initializer', 'setUpSecurity'];
     const INITIALIZER_ROUTES = ['Maleficarum\Api\Basic\Initializer', 'setUpRoutes'];
     const INITIALIZER_CONTROLLER = ['Maleficarum\Api\Basic\Initializer', 'setUpController'];
@@ -94,10 +94,13 @@ class Bootstrap {
      * @return Bootstrap
      */
     public function initialize() : \Maleficarum\Api\Bootstrap {
+        // register bootstrap as dependency for use in initializer steps
+        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Bootstrap', $this);
+        
         // validate and execute initializers
         foreach ($this->getInitializers() as $key => $initializer) {
             if (!is_callable($initializer)) throw new \LogicException(sprintf('Invalid initializer passed to the bootstrap initialization process. \%s::\%s()', static::class, __METHOD__));
-            $init_name = $initializer($this);
+            $init_name = $initializer($this->getParamContainer());
 
             !is_null($this->getTimeProfiler()) && $this->getTimeProfiler()->addMilestone('initializer_'.$key, 'Initializer executed ('.$init_name.').');
         }

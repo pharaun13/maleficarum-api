@@ -1,10 +1,12 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [7.0.0] - 2017-03-22
+## [7.0.0] - 2017-03-23
 ### Changed
 - Removed any database specific functionality from the API project.
 - Added a reliance on a specific maleficarum-database component for database functionalities.
+- Moved default initializers for external components into those components - they are no longer defined within this project.
+- Removed several hard dependencies like profiler or database from API project - API projects can no properly function without those components if they are not necessary.
 
 ## [6.3.0] - 2017-03-20
 ### Changed

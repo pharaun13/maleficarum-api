@@ -11,57 +11,13 @@ namespace Maleficarum\Api\Basic;
 
 class Initializer {
 	/**
-	 * Set up error/exception handling.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpErrorHandling(\Maleficarum\Api\Bootstrap $bootstrap) : string {
-		/** @var \Maleficarum\Handler\Http\Strategy\JsonStrategy $strategy */
-		$strategy = \Maleficarum\Ioc\Container::get('Maleficarum\Handler\Http\Strategy\JsonStrategy');
-		
-		/** @var \Maleficarum\Handler\Http\ExceptionHandler $handler */
-		$handler = \Maleficarum\Ioc\Container::get('Maleficarum\Handler\Http\ExceptionHandler', [$strategy]);
-
-		\set_exception_handler([$handler, 'handle']);
-		\set_error_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ErrorHandler'), 'handle']);
-
-		// return initializer name
-		return __METHOD__;
-	}
-
-	/**
-	 * Set up time profiler object.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpTimeProfiler(\Maleficarum\Api\Bootstrap $bootstrap) : string {
-		$bootstrap->setTimeProfiler(\Maleficarum\Ioc\Container::get('Maleficarum\Profiler\Time')->begin((float)$bootstrap->getParamContainer()['start'] ?? 0));
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Profiler\Time', $bootstrap->getTimeProfiler());
-
-		// return initializer name
-		return __METHOD__;
-	}
-
-	/**
-	 * Set up database profiler object.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpDbProfiler(\Maleficarum\Api\Bootstrap $bootstrap) : string {
-		$bootstrap->setDbProfiler(\Maleficarum\Ioc\Container::get('Maleficarum\Profiler\Database'));
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Profiler\Database', $bootstrap->getDbProfiler());
-
-		// return initializer name
-		return __METHOD__;
-	}
-
-	/**
 	 * Detect application environment.
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
 	 * @throws \RuntimeException
 	 * @return string
 	 */
-	static public function setUpEnvironment(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpEnvironment(array $opts = []) : string {
+		die(__METHOD__);
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -101,7 +57,7 @@ class Initializer {
 	 * @throws \RuntimeException
 	 * @return string
 	 */
-	static public function setUpConfig(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpConfig(array $opts = []) : string {
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -125,7 +81,7 @@ class Initializer {
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
 	 * @return string
 	 */
-	static public function setUpRequest(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpRequest(array $opts = []) : string {
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -144,7 +100,7 @@ class Initializer {
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
 	 * @return string
 	 */
-	static public function setUpResponse(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpResponse(array $opts = []) : string {
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -163,7 +119,7 @@ class Initializer {
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
 	 * @return string
 	 */
-	static public function setUpLogger(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpLogger(array $opts = []) : string {
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -182,7 +138,7 @@ class Initializer {
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
 	 * @return string
 	 */
-	static public function setUpQueue(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpQueue(array $opts = []) : string {
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -200,7 +156,7 @@ class Initializer {
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
 	 * @return string
 	 */
-	static public function setUpDatabase(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpDatabase(array $opts = []) : string {
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -214,12 +170,32 @@ class Initializer {
 		return __METHOD__;
 	}
 
+	/* ------------------------------------ Class Methods START ---------------------------------------- */
+
+	/**
+	 * Set up error/exception handling.
+	 * @return string
+	 */
+	static public function setUpErrorHandling() : string {
+		/** @var \Maleficarum\Handler\Http\Strategy\JsonStrategy $strategy */
+		$strategy = \Maleficarum\Ioc\Container::get('Maleficarum\Handler\Http\Strategy\JsonStrategy');
+
+		/** @var \Maleficarum\Handler\Http\ExceptionHandler $handler */
+		$handler = \Maleficarum\Ioc\Container::get('Maleficarum\Handler\Http\ExceptionHandler', [$strategy]);
+
+		\set_exception_handler([$handler, 'handle']);
+		\set_error_handler([\Maleficarum\Ioc\Container::get('Maleficarum\Handler\ErrorHandler'), 'handle']);
+		
+		// return initializer name
+		return __METHOD__;
+	}
+	
 	/**
 	 * Prepare and register the security object.
 	 * @param \Maleficarum\Api\Bootstrap $bootstrap
 	 * @return string
 	 */
-	static public function setUpSecurity(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpSecurity(array $opts = []) : string {
 		// load default builder if skip not requested
 		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
 		is_array($builders) or $builders = [];
@@ -239,7 +215,7 @@ class Initializer {
 	 * @throws \RuntimeException
 	 * @return string
 	 */
-	static public function setUpRoutes(\Maleficarum\Api\Bootstrap $bootstrap) : string {
+	static public function setUpRoutes(array $opts = []) : string {
 		// validate input container
 		$app = $bootstrap->getParamContainer()['app'] ?? null;
 		$routesPath = $bootstrap->getParamContainer()['routes'] ?? null;
@@ -286,5 +262,7 @@ class Initializer {
 		// return initializer name
 		return __METHOD__;
 	}
+	
+	/* ------------------------------------ Class Methods END ------------------------------------------ */
 }
 

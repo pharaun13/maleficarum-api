@@ -9,7 +9,6 @@
         "maleficarum/ioc": "^2.0",
         "maleficarum/environment": "^2.0",
         "maleficarum/config": "^2.0",
-        "maleficarum/profiler": "^2.0",
         "maleficarum/request": "^2.0",
         "maleficarum/http-response": "^2.0",
         "maleficarum/handler": "^3.0",
@@ -40,10 +39,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:pharaun13/maleficarum-config.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-profiler.git"
         },
         {
             "type": "vcs",
