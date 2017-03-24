@@ -18,8 +18,6 @@ class Bootstrap {
     const INITIALIZER_ROUTES = ['Maleficarum\Api\Basic\Initializer', 'setUpRoutes'];
     const INITIALIZER_CONTROLLER = ['Maleficarum\Api\Basic\Initializer', 'setUpController'];
     const INITIALIZER_DEBUG_LEVEL = ['Maleficarum\Api\Basic\Initializer', 'setUpDebugLevel'];
-    const INITIALIZER_LOGGER = ['Maleficarum\Api\Basic\Initializer', 'setUpLogger'];
-    const INITIALIZER_QUEUE = ['Maleficarum\Api\Basic\Initializer', 'setUpQueue'];
     
     /* ------------------------------------ Class Constant END ----------------------------------------- */
     

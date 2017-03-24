@@ -15,12 +15,12 @@ class Builder {
 	
 	const builderList = [
 		'security',
-		'controller',
-	    'logger',
-	    'queue'
+		'controller'
 	];
 
 	/* ------------------------------------ Class Constant END ----------------------------------------- */
+	
+	/* ------------------------------------ Class Methods START ---------------------------------------- */
 	
 	/**
 	 * Attach default implementation of Maleficarum builder functions to the IOC container.
@@ -51,23 +51,6 @@ class Builder {
 		
 		return $this;
 	}
-
-	/**
-	 * Register logger builders.
-	 * @param array $opts
-	 * @return \Maleficarum\Api\Basic\Builder
-	 */
-	private function registerLogger(array $opts = []) : \Maleficarum\Api\Basic\Builder {
-		\Maleficarum\Ioc\Container::register('Monolog\Logger', function () {
-			$logger = new \Monolog\Logger('api');
-			$prefix = isset($opts['prefix']) ? $opts['prefix'] : "Maleficarum";
-			$handler = new \Monolog\Handler\SyslogHandler('[PHP]['.$prefix.'][Api]', \LOG_USER, \Monolog\Logger::DEBUG, true, \LOG_PID);
-			$logger->pushHandler($handler);
-			return $logger;
-		});
-		
-		return $this;
-	}
 	
 	/**
 	 * Register controller builders.
@@ -93,30 +76,7 @@ class Builder {
 		
 		return $this;
 	}
-
-	/**
-	 * Register queue builders.
-	 * @param array $opts
-	 * @return \Maleficarum\Api\Basic\Builder
-	 */
-	private function registerQueue(array $opts = []) : \Maleficarum\Api\Basic\Builder {
-		\Maleficarum\Ioc\Container::register('PhpAmqpLib\Connection\AMQPConnection', function ($dep) {
-			if (!array_key_exists('Maleficarum\Config', $dep) || !isset($dep['Maleficarum\Config']['queue'])) {
-				throw new \RuntimeException('Impossible to create a PhpAmqpLib\Connection\AMQPConnection object - no queue config found. \Maleficarum\Ioc\Container::get()');
-			}
-			return new \PhpAmqpLib\Connection\AMQPStreamConnection(
-				$dep['Maleficarum\Config']['queue']['broker']['host'],
-				$dep['Maleficarum\Config']['queue']['broker']['port'],
-				$dep['Maleficarum\Config']['queue']['broker']['username'],
-				$dep['Maleficarum\Config']['queue']['broker']['password']
-			);
-		});
-		
-		\Maleficarum\Ioc\Container::register('Maleficarum\Rabbitmq\Connection', function ($dep) {
-			return (new \Maleficarum\Rabbitmq\Connection())
-				->setConfig($dep['Maleficarum\Config']);
-		});
-		
-		return $this;
-	}
+	
+	/* ------------------------------------ Class Methods END ------------------------------------------ */
+	
 }

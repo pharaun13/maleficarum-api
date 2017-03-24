@@ -30,11 +30,6 @@ abstract class Generic {
      * \Maleficarum\Response\Dependant
      */
     use \Maleficarum\Response\Dependant;
-
-    /**
-     * \Maleficarum\Api\Logger\Dependant
-     */
-    use \Maleficarum\Api\Logger\Dependant;
     
     /* ------------------------------------ Class Traits END ------------------------------------------- */
 

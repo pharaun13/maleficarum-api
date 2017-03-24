@@ -7,42 +7,6 @@ declare (strict_types=1);
 namespace Maleficarum\Api\Basic;
 
 class Initializer {
-	/**
-	 * Set up logger object.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpLogger(array $opts = []) : string {
-		// load default builder if skip not requested
-		$builders = $opts['builders'] ?? [];
-		is_array($builders) or $builders = [];
-		isset($builders['logger']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('logger');
-		
-		// load logger object
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\Logger', \Maleficarum\Ioc\Container::get('Monolog\Logger'));
-
-		// return initializer name
-		return __METHOD__;
-	}
-
-	/**
-	 * Prepare and register the command queue connection object.
-	 * @param \Maleficarum\Api\Bootstrap $bootstrap
-	 * @return string
-	 */
-	static public function setUpQueue(array $opts = []) : string {
-		// load default builder if skip not requested
-		$builders = $bootstrap->getParamContainer()['builders'] ?? [];
-		is_array($builders) or $builders = [];
-		isset($builders['queue']['skip']) or \Maleficarum\Ioc\Container::get('Maleficarum\Api\Basic\Builder')->register('queue');
-		
-		// load queue object
-		$rabbitConnection = \Maleficarum\Ioc\Container::get('Maleficarum\Rabbitmq\Connection');
-		\Maleficarum\Ioc\Container::registerDependency('Maleficarum\CommandQueue', $rabbitConnection);
-		
-		// return initializer name
-		return __METHOD__;
-	}
 
 	/* ------------------------------------ Class Methods START ---------------------------------------- */
 
