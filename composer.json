@@ -11,8 +11,7 @@
         "maleficarum/config": "^3.0",
         "maleficarum/request": "^3.0",
         "maleficarum/http-response": "^3.0",
-        "maleficarum/handler": "^3.0",
-        "maleficarum/logger": "^1.0"
+        "maleficarum/handler": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7"
@@ -55,10 +54,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:pharaun13/maleficarum-http-response.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-logger.git"
         }
     ]
 }
