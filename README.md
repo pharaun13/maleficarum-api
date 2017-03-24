@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [8.2.0] - 2017-03-24
+### Added
+- Added default support for Maleficarum\Rabbitmq in controller builder.
+
 ## [8.1.0] - 2017-03-24
 ### Added
 - Added default support for Maleficarum\Redis in controller builder.
