@@ -69,7 +69,8 @@ class Builder {
 
 			(method_exists($controller, 'addProfiler') && isset($dep['Maleficarum\Profiler\Time'])) and $controller->addProfiler($dep['Maleficarum\Profiler\Time'], 'time');
 			(method_exists($controller, 'addProfiler') && isset($dep['Maleficarum\Profiler\Database'])) and $controller->addProfiler($dep['Maleficarum\Profiler\Database'], 'database');
-			(method_exists($controller, 'setLogger') && isset($dep['Maleficarum\Logger'])) and $controller->setLogger($dep['Maleficarum\Logger']); 
+			(method_exists($controller, 'setLogger') && isset($dep['Maleficarum\Logger'])) and $controller->setLogger($dep['Maleficarum\Logger']);
+			(method_exists($controller, 'setRedis') && isset($dep['Maleficarum\Redis'])) and $controller->setRedis($dep['Maleficarum\Redis']);
 
 			return $controller;
 		});
