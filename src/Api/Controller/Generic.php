@@ -64,18 +64,18 @@ abstract class Generic {
     protected function respondToBadRequest(array $errors = []) {
         throw (new \Maleficarum\Exception\BadRequestException())->setErrors($errors);
     }
-
+    
     /**
-     * Immediately halt all actions and send a 409 Conflict response with provided errors.
+     * Immediately halt all actions and send a 401 Unauthorized response.
      *
-     * @param array $errors
+     * @param string $message
      * @return void
-     * @throws \Maleficarum\Exception\ConflictException
+     * @throws \Maleficarum\Exception\UnauthorizedException
      */
-    protected function respondToConflict(array $errors = []) {
-        throw (new \Maleficarum\Exception\ConflictException())->setErrors($errors);
+    protected function respondToUnauthorized(string $message) {
+        throw new \Maleficarum\Exception\UnauthorizedException($message);
     }
-
+    
     /**
      * Immediately halt all actions and send a 404 Not found response.
      *
@@ -85,6 +85,17 @@ abstract class Generic {
      */
     protected function respondToNotFound(string $message) {
         throw new \Maleficarum\Exception\NotFoundException($message);
+    }
+    
+    /**
+     * Immediately halt all actions and send a 409 Conflict response with provided errors.
+     *
+     * @param array $errors
+     * @return void
+     * @throws \Maleficarum\Exception\ConflictException
+     */
+    protected function respondToConflict(array $errors = []) {
+        throw (new \Maleficarum\Exception\ConflictException())->setErrors($errors);
     }
     
     /* ------------------------------------ Class Methods END ------------------------------------------ */

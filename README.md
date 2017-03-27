@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [8.3.0] - 2017-03-27
+### Added
+- New helper method for the generic controller - one that responds with a 401 response.
+- Support for an optional "initialize" call on generic controller classes.
+
 ## [8.2.0] - 2017-03-24
 ### Added
 - Added default support for Maleficarum\Rabbitmq in controller builder.
