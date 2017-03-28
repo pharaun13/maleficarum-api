@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [8.4.1] - 2017-03-28
+### Fixed
+- Call setAuth method instead of setQueue in basic api builder
+
 ## [8.4.0] - 2017-03-27
 ### Added
 - New generic controller hook added to default builder - setAuth.
