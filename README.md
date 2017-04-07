@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [8.5.0] - 2017-04-07
+### Changed
+- Security check fails will now return a proper 403 Forbidden response.
+
 ## [8.4.1] - 2017-03-28
 ### Fixed
 - Call setAuth method instead of setQueue in basic api builder

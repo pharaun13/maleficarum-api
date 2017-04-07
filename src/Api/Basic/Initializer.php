@@ -73,7 +73,11 @@ class Initializer {
 		
 		/** @var \Maleficarum\Api\Security\Manager $security */
 		$security = \Maleficarum\Ioc\Container::get('Maleficarum\Api\Security\Manager');
-		$security->verify();
+		try {
+			$security->verify();
+		} catch (\Maleficarum\Exception\SecurityException $e) {
+			throw new \Maleficarum\Exception\SecurityException('');
+		}
 
 		// return initializer name
 		return __METHOD__;
