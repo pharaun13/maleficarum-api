@@ -8,9 +8,9 @@ declare (strict_types=1);
 namespace Maleficarum\Api\Controller;
 
 abstract class Generic {
-    
+
     /* ------------------------------------ Class Traits START ----------------------------------------- */
-    
+
     /**
      * \Maleficarum\Config\Dependant
      */
@@ -30,15 +30,16 @@ abstract class Generic {
      * \Maleficarum\Response\Dependant
      */
     use \Maleficarum\Response\Dependant;
-    
+
     /* ------------------------------------ Class Traits END ------------------------------------------- */
 
     /* ------------------------------------ Class Methods START ---------------------------------------- */
-    
+
     /**
      * Perform URL to class method remapping.
      *
      * @param string $method
+     *
      * @return mixed
      * @throws \Maleficarum\Exception\NotFoundException
      */
@@ -58,46 +59,49 @@ abstract class Generic {
      * Immediately halt all actions and send a 400 Bad Request response with provided errors.
      *
      * @param array $errors
+     *
      * @return void
      * @throws \Maleficarum\Exception\BadRequestException
      */
     protected function respondToBadRequest(array $errors = []) {
         throw (new \Maleficarum\Exception\BadRequestException())->setErrors($errors);
     }
-    
+
     /**
      * Immediately halt all actions and send a 401 Unauthorized response.
      *
      * @param string $message
+     *
      * @return void
      * @throws \Maleficarum\Exception\UnauthorizedException
      */
     protected function respondToUnauthorized(string $message) {
         throw new \Maleficarum\Exception\UnauthorizedException($message);
     }
-    
+
     /**
      * Immediately halt all actions and send a 404 Not found response.
      *
      * @param string $message
+     *
      * @return void
      * @throws \Maleficarum\Exception\NotFoundException
      */
     protected function respondToNotFound(string $message) {
         throw new \Maleficarum\Exception\NotFoundException($message);
     }
-    
+
     /**
      * Immediately halt all actions and send a 409 Conflict response with provided errors.
      *
      * @param array $errors
+     *
      * @return void
      * @throws \Maleficarum\Exception\ConflictException
      */
     protected function respondToConflict(array $errors = []) {
         throw (new \Maleficarum\Exception\ConflictException())->setErrors($errors);
     }
-    
+
     /* ------------------------------------ Class Methods END ------------------------------------------ */
-    
 }

@@ -4,15 +4,16 @@
  *
  * @extends \Maleficarum\Api\Controller\Generic
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Api\Controller;
 
-class Fallback extends \Maleficarum\Api\Controller\Generic
-{
+class Fallback extends \Maleficarum\Api\Controller\Generic {
     /**
      * Throws not found exception
-     * 
+     *
      * @see \Maleficarum\Api\Controller\Generic::__remap()
+     *
      * @param string $method
      *
      * @return void

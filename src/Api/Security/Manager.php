@@ -2,11 +2,11 @@
 /**
  * This class performs security checks during application bootstrapping.
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Api\Security;
 
-class Manager
-{
+class Manager {
     /**
      * Use \Maleficarum\Config\Dependant functionality.
      *
@@ -28,21 +28,31 @@ class Manager
      * @throws \RuntimeException
      * @throws \Maleficarum\Exception\SecurityException
      */
-    public function verify() : \Maleficarum\Api\Security\Manager {
+    public function verify(): \Maleficarum\Api\Security\Manager {
         // Check if any checks have been specified. If not the security manager returns a success.
-        if (!is_array($this->getConfig()['security'])) return $this;
-        if (!is_array($this->getConfig()['security']['checks']) || !count($this->getConfig()['security']['checks'])) return $this;
-        if ($this->isSkippableRequest()) return $this;
+        if (!is_array($this->getConfig()['security'])) {
+            return $this;
+        }
+        if (!is_array($this->getConfig()['security']['checks']) || !count($this->getConfig()['security']['checks'])) {
+            return $this;
+        }
+        if ($this->isSkippableRequest()) {
+            return $this;
+        }
 
         foreach ($this->getConfig()['security']['checks'] as $cDef) {
             // initialize check
             $check = \Maleficarum\Ioc\Container::get($cDef);
 
             // validate check object
-            if (!($check instanceof \Maleficarum\Api\Security\Check\AbstractCheck)) throw new \RuntimeException('Invalid security check object. \Maleficarum\Api\Security\Manager::verify()');
+            if (!($check instanceof \Maleficarum\Api\Security\Check\AbstractCheck)) {
+                throw new \RuntimeException('Invalid security check object. \Maleficarum\Api\Security\Manager::verify()');
+            }
 
             // execute check object
-            if (!$check->execute()) throw new \Maleficarum\Exception\SecurityException('Security check failed (' . get_class($check) . ').');
+            if (!$check->execute()) {
+                throw new \Maleficarum\Exception\SecurityException('Security check failed (' . get_class($check) . ').');
+            }
         }
 
         return $this;
@@ -53,7 +63,7 @@ class Manager
      *
      * @return bool
      */
-    private function isSkippableRequest() : bool {
+    private function isSkippableRequest(): bool {
         if (is_null($this->getRequest())) {
             return false;
         }
@@ -64,7 +74,9 @@ class Manager
 
         if (isset($securityConfig['skip_routes']) && is_array($securityConfig['skip_routes'])) {
             // wildcard on routes - skip all
-            if (array_key_exists('*', $securityConfig['skip_routes']))  return true;
+            if (array_key_exists('*', $securityConfig['skip_routes'])) {
+                return true;
+            }
 
             // specific route defined as skip
             if (array_key_exists($path, $securityConfig['skip_routes'])) {

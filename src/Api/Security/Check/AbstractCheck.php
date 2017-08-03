@@ -2,11 +2,11 @@
 /**
  * This class is the basis for all security check classes.
  */
+declare (strict_types=1);
 
 namespace Maleficarum\Api\Security\Check;
 
-abstract class AbstractCheck
-{
+abstract class AbstractCheck {
     /**
      * Execute specific check logic.
      *
@@ -14,5 +14,5 @@ abstract class AbstractCheck
      *
      * @return bool
      */
-    abstract public function execute(array $data = []) : bool;
+    abstract public function execute(array $data = []): bool;
 }

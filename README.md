@@ -1,6 +1,12 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [9.0.0] - 2017-08-03
+### Changed
+- Bump phalcon version
+- Bump php version
+- Bump maleficarum components
+
 ## [8.6.0] - 2017-04-07
 ### Changed
 - Changed how security check skips are defined. As of now you can skip a route on all methods, just one methods or you can skip checks on all routes regardless of anything.
