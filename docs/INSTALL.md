@@ -184,7 +184,12 @@ Please remember to replace `/var/www/project` with the proper project path e.g. 
     
     // add vendor based autoloading
     require_once VENDOR_PATH . '/autoload.php';
-    
+
+    // add project builder definitions
+    \Maleficarum\Ioc\Container::addNamespace('Model', SRC_PATH . DIRECTORY_SEPARATOR . 'Ioc');
+    \Maleficarum\Ioc\Container::addNamespace('Logic', SRC_PATH . DIRECTORY_SEPARATOR . 'Ioc');
+    \Maleficarum\Ioc\Container::addNamespace('Service', SRC_PATH . DIRECTORY_SEPARATOR . 'Ioc');
+
     // create Phalcon micro application
     $app = \Maleficarum\Ioc\Container::get('Phalcon\Mvc\Micro');
     $app->getRouter()->setUriSource(\Phalcon\Mvc\Router::URI_SOURCE_SERVER_REQUEST_URI);
