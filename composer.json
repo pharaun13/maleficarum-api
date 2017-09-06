@@ -9,7 +9,7 @@
         "maleficarum/ioc": "^2.0",
         "maleficarum/environment": "^4.0",
         "maleficarum/config": "^4.0",
-        "maleficarum/request": "^4.0",
+        "maleficarum/request": "^4.1",
         "maleficarum/http-response": "^4.0",
         "maleficarum/handler": "^3.1"
     },

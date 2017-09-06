@@ -1,7 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [9.0.0] - 2017-08-03
+## [9.1.0] - 2017-09-06
+### Changed
+- Upgraded maleficarum request dependency.
+
 ### Changed
 - Bump phalcon version
 - Bump php version
