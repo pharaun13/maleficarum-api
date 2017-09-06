@@ -5,6 +5,7 @@ This is the Maleficarum API component implementation.
 ### Changed
 - Upgraded maleficarum request dependency.
 
+## [9.0.0] - 2017-08-03
 ### Changed
 - Bump phalcon version
 - Bump php version
