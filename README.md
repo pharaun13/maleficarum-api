@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [9.2.0] - 2017-09-19
+### Added
+- Added sorting/pagination validation to generic controller implementation.
+
 ## [9.1.0] - 2017-09-06
 ### Changed
 - Upgraded maleficarum request dependency.
