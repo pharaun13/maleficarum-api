@@ -174,7 +174,7 @@ abstract class Generic {
      * @return int given parameter value as an integer
      * @throws \Maleficarum\Exception\BadRequestException if given parameter is missing or has invalid format
      */
-    protected function getIntegerParameter(string $paramName) : integer {
+    protected function getIntegerParameter(string $paramName) : int {
         // define common response comment
         $intInfo = 'It must be 64-bit integer between ' . \PHP_INT_MIN . ' and ' . \PHP_INT_MAX;
         

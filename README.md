@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [9.2.1] - 2017-09-19
+### Fixed
+- Incorrect return type in \Controller\Generic
+
 ## [9.2.0] - 2017-09-19
 ### Added
 - Added sorting/pagination validation to generic controller implementation.
