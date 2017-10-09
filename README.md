@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [9.3.0] - 2017-10-06
+### Added
+- Added routes version handling
+
 ## [9.2.1] - 2017-09-19
 ### Fixed
 - Incorrect return type in \Controller\Generic
