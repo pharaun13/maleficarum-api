@@ -98,13 +98,13 @@ class Initializer {
         try {
             $request = \Maleficarum\Ioc\Container::getDependency('Maleficarum\Request');
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Request object not initialized. \%s', __METHOD__));
+            throw new \RuntimeException(sprintf('Request object not initialized. \%s', __METHOD__), $e->getCode(), $e);
         }
 
         try {
             $config = \Maleficarum\Ioc\Container::getDependency('Maleficarum\Config');
         } catch (\RuntimeException $e) {
-            throw new \RuntimeException(sprintf('Config object not initialized. \%s', __METHOD__));
+            throw new \RuntimeException(sprintf('Config object not initialized. \%s', __METHOD__), $e->getCode(), $e);
         }
 
         // validate input container
@@ -136,7 +136,7 @@ class Initializer {
         $availableVersions = $config['routes']['versions'] ?? [];
         $requestVersion = $request->getHeaders()[$versionHeader] ?? null;
 
-        $versionedRoutesPath = self::determineVersionedRoutePath($availableVersions, $routesPathSuffix, $defaultPath, $requestVersion);
+        $versionedRoutesPath = self::determineVersionedRoutePath($availableVersions, $routesPathSuffix, $routesPath, $defaultPath, $requestVersion);
         if (is_string($versionedRoutesPath)) {
             require_once $versionedRoutesPath;
         }
@@ -174,14 +174,19 @@ class Initializer {
     /**
      * Determines versioned routes path
      *
-     * @param array $availableVersions
+     * @param string[] $availableVersions
      * @param string $pathSuffix
+     * @param null|string $routesPath
      * @param null|string $defaultPath
      * @param null|string $requestVersion
      *
      * @return null|string
      */
-    static private function determineVersionedRoutePath(array $availableVersions, string $pathSuffix, ?string $defaultPath, ?string $requestVersion): ?string {
+    static private function determineVersionedRoutePath(array $availableVersions, string $pathSuffix, ?string $routesPath, ?string $defaultPath, ?string $requestVersion): ?string {
+        if (empty($routesPath)) {
+            return null;
+        }
+
         if (empty($availableVersions) && empty($defaultPath)) {
             return null;
         }
@@ -194,12 +199,13 @@ class Initializer {
             return null;
         }
 
-        $versionedRoutesPath = isset($availableVersions[$requestVersion]) ? $availableVersions[$requestVersion] . $pathSuffix : null;
+        $routesPath .= '/';
+        $versionedRoutesPath = isset($availableVersions[$requestVersion]) ? $routesPath . $availableVersions[$requestVersion] . $pathSuffix : null;
         if (!empty($versionedRoutesPath) && is_readable($versionedRoutesPath)) {
             return $versionedRoutesPath;
         }
 
-        $defaultPath = isset($defaultPath) ? $defaultPath . $pathSuffix : null;
+        $defaultPath = isset($defaultPath) ? $routesPath . $defaultPath . $pathSuffix : null;
         if (!empty($defaultPath) && is_readable($defaultPath)) {
             return $defaultPath;
         }
