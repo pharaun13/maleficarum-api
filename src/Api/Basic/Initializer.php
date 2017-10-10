@@ -195,7 +195,7 @@ class Initializer {
             return null;
         }
 
-        if (!preg_match('/^\d+\.\d+$/', $requestVersion)) {
+        if (null === $requestVersion || !preg_match('/^\d+\.\d+$/', $requestVersion)) {
             return null;
         }
 
