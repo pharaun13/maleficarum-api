@@ -1,0 +1,9 @@
+Format:
+* xx (error namespace)
+    * yyyy (error id)
+
+* 00 - generic errors:
+    * 0001 - Required parameter missing
+    * 0002 - Invalid int parameter
+    * 0101 - Invalid `limit` parameter
+    * 0102 - Invalid `offset` parameter

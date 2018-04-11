@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [9.4.0] - 2018-04-11
+### Changed
+- Changed errors format in \Controller\Generic.
+
 ## [9.3.0] - 2017-10-06
 ### Added
 - Added routes version handling
