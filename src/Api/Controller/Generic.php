@@ -30,6 +30,11 @@ abstract class Generic {
      */
     use \Maleficarum\Response\Dependant;
 
+    /**
+     * \Maleficarum\Data\Container\Error\Container
+     */
+    use \Maleficarum\Data\Container\Error\Container;
+
     /* ------------------------------------ Class Traits END ------------------------------------------- */
 
     /* ------------------------------------ Class Property START --------------------------------------- */
@@ -153,16 +158,22 @@ abstract class Generic {
      */
     protected function validatePagination() : \Maleficarum\Api\Controller\Generic {
         // limit - must be a positive integer if provided between 1 and COLLECTION_MAX_LIMIT
-        (
-            !is_null($this->getRequest()->limit) &&
-            filter_var($this->getRequest()->limit, \FILTER_VALIDATE_INT, ['options'=>['min_range'=>1,'max_range'=>static::$maxLimit]]) === false
-        ) and $this->respondToBadRequest(['Invalid `limit` parameter - unsupported value.']);
+        if (
+            null !== $this->getRequest()->limit &&
+            \filter_var($this->getRequest()->limit, \FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => static::$maxLimit]]) === false
+        ) {
+            $this->addError("0001-000101", "Invalid `limit` parameter - unsupported value.");
+            $this->respondToBadRequest($this->getAllErrors());
+        }
 
         // offset - must be a non-negative integer if provided
-        (
-            !is_null($this->getRequest()->offset) && 
-            filter_var($this->getRequest()->offset, \FILTER_VALIDATE_INT, ['options'=>['min_range'=>0]]) === false
-        ) and $this->respondToBadRequest(['Invalid `offset` parameter - unsupported value.']);
+        if (
+            null !== $this->getRequest()->offset &&
+            \filter_var($this->getRequest()->offset, \FILTER_VALIDATE_INT, ["options" => ["min_range" => 0]]) === false
+        ) {
+            $this->addError("0001-000102", "Invalid `offset` parameter - unsupported value.");
+            $this->respondToBadRequest($this->getAllErrors());
+        }
 
         return $this;
     }
@@ -179,14 +190,20 @@ abstract class Generic {
         $intInfo = 'It must be 64-bit integer between ' . \PHP_INT_MIN . ' and ' . \PHP_INT_MAX;
         
         // check if parameter was defined 
-        is_null($this->getRequest()->{$paramName}) and $this->respondToBadRequest(["`$paramName` is required but missing. $intInfo"]);
-        
+        if (null === $this->getRequest()->{$paramName}) {
+            $this->addError("0001-000001", "`$paramName` is required but missing. $intInfo");
+            $this->respondToBadRequest($this->getAllErrors());
+        }
+
         // filter request value
         $paramValue = filter_var($this->getRequest()->{$paramName}, \FILTER_VALIDATE_INT);
         
         // check if it was an actual integer
-        (false === $paramValue) and $this->respondToBadRequest(["Invalid `$paramName` value. $intInfo"]);
-        
+        if (false === $paramValue) {
+            $this->addError("0001-000002", "Invalid `$paramName` value. $intInfo");
+            $this->respondToBadRequest($this->getAllErrors());
+        }
+
         return (int)$paramValue;
     }
     

@@ -11,7 +11,8 @@
         "maleficarum/config": "^4.0",
         "maleficarum/request": "^4.1",
         "maleficarum/http-response": "^4.0",
-        "maleficarum/handler": "^3.1"
+        "maleficarum/handler": "^3.1",
+        "maleficarum/data": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -46,6 +47,10 @@
         {
             "type": "vcs",
             "url": "git@github.com:pharaun13/maleficarum-http-response.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:pharaun13/maleficarum-data.git"
         }
     ]
 }
