@@ -1,7 +1,7 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [9.4.0] - 2018-04-11
+## [10.0.0] - 2018-04-11
 ### Changed
 - Changed errors format in \Controller\Generic.
 
