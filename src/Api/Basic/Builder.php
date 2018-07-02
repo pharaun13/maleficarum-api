@@ -80,7 +80,7 @@ class Builder {
             (method_exists($controller, 'addProfiler') && isset($dep['Maleficarum\Profiler\Database'])) and $controller->addProfiler($dep['Maleficarum\Profiler\Database'], 'database');
             (method_exists($controller, 'setLogger') && isset($dep['Maleficarum\Logger'])) and $controller->setLogger($dep['Maleficarum\Logger']);
             (method_exists($controller, 'setRedis') && isset($dep['Maleficarum\Redis'])) and $controller->setRedis($dep['Maleficarum\Redis']);
-            (method_exists($controller, 'setQueue') && isset($dep['Maleficarum\CommandQueue'])) and $controller->setQueue($dep['Maleficarum\CommandQueue']);
+            (method_exists($controller, 'setQueue') && isset($dep['Maleficarum\CommandRouter'])) and $controller->setQueue($dep['Maleficarum\CommandRouter']);
             (method_exists($controller, 'setAuth') && isset($dep['Maleficarum\Auth'])) and $controller->setAuth($dep['Maleficarum\Auth']);
 
             // if defined - run controller wide initialization
