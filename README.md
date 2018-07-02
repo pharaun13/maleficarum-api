@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [10.0.1] - 2018-07-02
+### Fixed
+- Fixed queue manager injection
+
 ## [10.0.0] - 2018-04-11
 ### Changed
 - Changed errors format in \Controller\Generic.
