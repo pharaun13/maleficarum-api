@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [11.0.0] - 2018-08-30
+### Fixed
+- Bump data component
+
 ## [10.0.1] - 2018-07-02
 ### Fixed
 - Fixed queue manager injection
