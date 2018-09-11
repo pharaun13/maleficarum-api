@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [12.0.0] - 2018-09-11
+### Changed
+- Upgraded maleficarum\data dependency to 4.X
+
 ## [11.0.0] - 2018-08-30
 ### Fixed
 - Bump data component
