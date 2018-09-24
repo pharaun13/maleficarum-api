@@ -2,55 +2,21 @@
     "name": "maleficarum/api",
     "description": "API component",
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "ext-mbstring": "*",
         "ext-PDO": "*",
         "ext-phalcon": "^3.2",
-        "maleficarum/ioc": "^2.0",
-        "maleficarum/environment": "^4.0",
-        "maleficarum/config": "^4.0",
-        "maleficarum/request": "^4.1",
-        "maleficarum/http-response": "^4.0",
-        "maleficarum/handler": "^3.1",
+        "maleficarum/ioc": "^3.0",
+        "maleficarum/environment": "^5.0",
+        "maleficarum/config": "^5.0",
+        "maleficarum/request": "^5.0",
+        "maleficarum/http-response": "^5.0",
+        "maleficarum/handler": "^4.0",
         "maleficarum/data": "^4.0"
     },
     "autoload": {
         "psr-4": {
             "Maleficarum\\Api\\": "src/Api/"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-handler.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-ioc.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-environment.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-config.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-request.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-response.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-http-response.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-data.git"
-        }
-    ]
+    }
 }
