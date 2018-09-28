@@ -4,7 +4,6 @@
     "require": {
         "php": "^7.2",
         "ext-mbstring": "*",
-        "ext-PDO": "*",
         "ext-phalcon": "^3.2",
         "maleficarum/ioc": "^3.0",
         "maleficarum/environment": "^5.0",
