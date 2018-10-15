@@ -47,7 +47,7 @@ class Builder {
      * @return \Maleficarum\Api\Basic\Builder
      */
     private function registerSecurity(array $opts = []): \Maleficarum\Api\Basic\Builder {
-        \Maleficarum\Ioc\Container::register('Maleficarum\Api\Security\Manager', function ($dep) {
+        \Maleficarum\Ioc\Container::registerBuilder('Maleficarum\Api\Security\Manager', function ($dep) {
             return (new \Maleficarum\Api\Security\Manager())
                 ->setConfig($dep['Maleficarum\Config'])
                 ->setRequest($dep['Maleficarum\Request']);
@@ -64,7 +64,7 @@ class Builder {
      * @return \Maleficarum\Api\Basic\Builder
      */
     private function registerController(array $opts = []): \Maleficarum\Api\Basic\Builder {
-        \Maleficarum\Ioc\Container::register('Controller', function ($dep, $options) {
+        \Maleficarum\Ioc\Container::registerBuilder('Controller', function ($dep, $options) {
             $controller = new $options['__class']();
             if (!$controller instanceof \Maleficarum\Api\Controller\Generic) {
                 throw new \RuntimeException('Controller builder function used to create a non controller class. \Maleficarum\Ioc\Container::get()');
