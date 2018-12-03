@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [13.0.1] - 2018-12-03
+### Changed
+- Allow use of older data component versions
+
 ## [13.0.0] - 2018-09-24
 ### Changed
 - Upgraded IoC component to version 3.x and dependant components   
