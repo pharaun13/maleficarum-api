@@ -11,7 +11,7 @@
         "maleficarum/request": "^5.0",
         "maleficarum/http-response": "^5.0",
         "maleficarum/handler": "^4.0",
-        "maleficarum/data": "^4.0"
+        "maleficarum/data": "^2.0|^3.0|^4.0"
     },
     "autoload": {
         "psr-4": {
