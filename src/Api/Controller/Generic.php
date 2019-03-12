@@ -142,10 +142,22 @@ abstract class Generic {
      */
     protected function validateSorting(string $subset) : \Maleficarum\Api\Controller\Generic {
         // validate if can actually run sorting validation for the specified subset
-        is_array(static::$sortMap[$subset]) or $this->respondToBadRequest(['Invalid `sort` parameter - unsupported value.']);
+        if (
+            !\array_key_exists($subset, static::$sortMap) ||
+            !\is_array(static::$sortMap[$subset])
+        ) {
+            $this->addError('0001-000103', 'Invalid `sort` parameter - unsupported value.');
+            $this->respondToBadRequest($this->getAllErrors());
+        }
 
         // sort - must belong to a predefined set of values (static::$sortMap) if provided (LSB)
-        (!is_null($this->getRequest()->sort) && !array_key_exists($this->getRequest()->sort, static::$sortMap[$subset])) and $this->respondToBadRequest(['Invalid `sort` parameter - unsupported value.']);
+        if (
+            $this->getRequest()->sort !== null &&
+            !array_key_exists($this->getRequest()->sort, static::$sortMap[$subset])
+        ) {
+            $this->addError('0001-000103', 'Invalid `sort` parameter - unsupported value.');
+            $this->respondToBadRequest($this->getAllErrors());
+        }
 
         return $this;
     }
