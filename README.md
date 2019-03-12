@@ -1,7 +1,7 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [13.0.2] - 2019-03-12
+## [13.1.0] - 2019-03-12
 ### Changed
 - Changed "sort" errors format in \Controller\Generic.
 
