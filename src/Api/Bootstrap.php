@@ -45,7 +45,7 @@ class Bootstrap {
      */
     public function initialize(): \Maleficarum\Api\Bootstrap {
         // register bootstrap as dependency for use in initializer steps
-        \Maleficarum\Ioc\Container::registerDependency('Maleficarum\Bootstrap', $this);
+        \Maleficarum\Ioc\Container::registerShare('Maleficarum\Bootstrap', $this);
 
         // validate and execute initializers
         foreach ($this->getInitializers() as $key => $initializer) {
@@ -55,7 +55,7 @@ class Bootstrap {
             $init_name = $initializer($this->getParamContainer());
 
             try {
-                \Maleficarum\Ioc\Container::getDependency('Maleficarum\Profiler\Time')->addMilestone('initializer_' . $key, 'Initializer executed (' . $init_name . ').');
+                \Maleficarum\Ioc\Container::retrieveShare('Maleficarum\Profiler\Time')->addMilestone('initializer_' . $key, 'Initializer executed (' . $init_name . ').');
             } catch (\RuntimeException $e) {
             }
         }
@@ -71,13 +71,13 @@ class Bootstrap {
     public function conclude(): \Maleficarum\Api\Bootstrap {
         // complete profiling
         try {
-            \Maleficarum\Ioc\Container::getDependency('Maleficarum\Profiler\Time')->end();
+            \Maleficarum\Ioc\Container::retrieveShare('Maleficarum\Profiler\Time')->end();
         } catch (\RuntimeException $e) {
         }
 
         // output any response data
         try {
-            \Maleficarum\Ioc\Container::getDependency('Maleficarum\Response')->output();
+            \Maleficarum\Ioc\Container::retrieveShare('Maleficarum\Response')->output();
         } catch (\RuntimeException $e) {
         }
 

@@ -1,9 +1,22 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [12.0.1] - 2019-04-23
+## [13.1.1] - 2019-04-23
 ### Changed
 - Added graceful shutdown when parse_url function fails due to a PHP bug (https://bugs.php.net/bug.php?id=75041)
+
+## [13.1.0] - 2019-03-12
+### Changed
+- Changed "sort" errors format in \Controller\Generic.
+
+## [13.0.1] - 2018-12-03
+### Changed
+- Allow use of older data component versions
+
+## [13.0.0] - 2018-09-24
+### Changed
+- Upgraded IoC component to version 3.x and dependant components   
+- Removed repositories section from composer file   
 
 ## [12.0.0] - 2018-09-11
 ### Changed

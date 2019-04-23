@@ -7,3 +7,4 @@ Format:
     * 0002 - Invalid int parameter
     * 0101 - Invalid `limit` parameter
     * 0102 - Invalid `offset` parameter
+    * 0103 - Invalid `sort` parameter
