@@ -69,6 +69,10 @@ class Manager {
         }
 
         $path = parse_url($this->getRequest()->getUri(), \PHP_URL_PATH);
+        if (false === $path) {
+            throw new \Maleficarum\Exception\SecurityException('Security check failed - invalid URL provided.');
+        }
+        
         $securityConfig = $this->getConfig()['security'];
         $method = $this->getRequest()->getMethod();
 
