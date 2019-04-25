@@ -44,17 +44,21 @@ class Initializer {
         }
 
         // set handler debug level and error display value based on env
-        if (in_array($environment, ['local', 'development', 'staging'])) {
-            \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_FULL);
-            ini_set('display_errors', '1');
-        } elseif ('uat' === $environment) {
-            \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_LIMITED);
-            ini_set('display_errors', '0');
-        } elseif ('production' === $environment) {
-            \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_CRUCIAL);
-            ini_set('display_errors', '0');
-        } else {
-            throw new \RuntimeException(sprintf('Unrecognised environment. \%s', __METHOD__));
+        switch ($environment) {
+            case 'local':
+            case 'development':
+            case 'staging':
+                \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_FULL);
+                break;
+            case 'uat':
+            case 'sandbox':
+                \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_LIMITED);
+                break;
+            case 'production':
+                \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_CRUCIAL);
+                break;
+            default:
+                throw new \RuntimeException(sprintf('Unrecognised environment. \%s', __METHOD__));
         }
 
         // return initializer name
