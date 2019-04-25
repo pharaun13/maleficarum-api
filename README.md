@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [13.1.2] - 2019-04-25
+### Changed
+- Added sandbox environment
+
 ## [13.1.1] - 2019-04-23
 ### Changed
 - Added graceful shutdown when parse_url function fails due to a PHP bug (https://bugs.php.net/bug.php?id=75041)
