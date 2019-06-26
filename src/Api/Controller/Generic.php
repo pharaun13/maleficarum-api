@@ -77,12 +77,10 @@ abstract class Generic {
         $action = $method . 'Action';
 
         if (method_exists($this, $action)) {
-            $this->{$action}();
+            return $this->{$action}();
         } else {
             $this->respondToNotFound('404 - page not found.');
         }
-
-        return true;
     }
 
     /**
