@@ -9,7 +9,7 @@
         "maleficarum/environment": "^5.0",
         "maleficarum/config": "^5.0",
         "maleficarum/request": "dev-master",
-        "maleficarum/http-response": "^5.0",
+        "maleficarum/http-response": "dev-master",
         "maleficarum/handler": "^4.0",
         "maleficarum/data": "^2.0|^3.0|^4.0"
     },
