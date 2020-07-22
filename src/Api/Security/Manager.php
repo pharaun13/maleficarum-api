@@ -91,6 +91,16 @@ class Manager {
             }
         }
 
+        if (isset($securityConfig['skip_regex_routes']) && is_array($securityConfig['skip_regex_routes'])) {
+            foreach ($securityConfig['skip_regex_routes'] as $route => $value) {
+                if (\preg_match($route, $path)) {
+                    if (trim($securityConfig['skip_regex_routes'][$route]) === '*' || trim($securityConfig['skip_regex_routes'][$route]) === $method) {
+                        return true;
+                    }
+                }
+            }
+        }
+
         return false;
     }
 }
