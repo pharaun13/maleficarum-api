@@ -97,6 +97,8 @@ class Manager {
                     if (trim($securityConfig['skip_regex_routes'][$route]) === '*' || trim($securityConfig['skip_regex_routes'][$route]) === $method) {
                         return true;
                     }
+
+                    break;
                 }
             }
         }
