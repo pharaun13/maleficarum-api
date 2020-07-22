@@ -91,6 +91,21 @@ class Manager {
             }
         }
 
+        if (isset($securityConfig['skip_regex_routes']) && is_array($securityConfig['skip_regex_routes'])) {
+            foreach ($securityConfig['skip_regex_routes'] as $route => $value) {
+                if (substr($route, 0, 2) != '/^' || substr($route, -2) != '$/') {
+                    throw new \RuntimeException('Both string anchors have to be provided in the route regex: ' . $route);
+                }
+                if (\preg_match($route, $path)) {
+                    if (trim($securityConfig['skip_regex_routes'][$route]) === '*' || trim($securityConfig['skip_regex_routes'][$route]) === $method) {
+                        return true;
+                    }
+
+                    break;
+                }
+            }
+        }
+
         return false;
     }
 }
