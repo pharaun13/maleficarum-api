@@ -43,6 +43,12 @@ class Initializer {
             throw new \RuntimeException(sprintf('Environment object not initialized. \%s', __METHOD__));
         }
 
+        if (stripos($environment, 'uat') !== false) {
+            \Maleficarum\Handler\AbstractHandler::setDebugLevel(\Maleficarum\Handler\AbstractHandler::DEBUG_LEVEL_LIMITED);
+
+            return __METHOD__;
+        }
+
         // set handler debug level and error display value based on env
         switch ($environment) {
             case 'local':
