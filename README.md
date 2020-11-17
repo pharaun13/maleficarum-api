@@ -11,6 +11,14 @@ This is the Maleficarum API component implementation.
 - Updated to depend on and work with Maleficarum\Response 6.0.X
 - Updated to depend on and work with Maleficarum\Request 6.0.X
 
+## [13.2.1] - 2020-11-17
+### Changed
+- - Add support for multiple UAT environments
+
+## [13.2.0] - 2020-07-22
+### Changed
+- - Added option to skip routes authentication based on reg ex'es by using skip_regex_routes config parameter
+
 ## [13.1.2] - 2019-04-25
 ### Changed
 - Added sandbox environment
