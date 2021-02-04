@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [14.1.1] - 2021-02-04
+### Changed
+- Allow for uat-* environments
+
 ## [14.1.0] - 2020-07-22
 ### Changed
 - Added option to skip routes authentication based on reg ex'es by using skip_regex_routes config parameter 
