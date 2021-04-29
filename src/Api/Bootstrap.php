@@ -68,7 +68,7 @@ class Bootstrap {
      *
      * @return \Maleficarum\Api\Bootstrap
      */
-    public function conclude(): \Maleficarum\Api\Bootstrap {
+    public function conclude(\Maleficarum\Response\AbstractResponse $response): \Maleficarum\Api\Bootstrap {
         // complete profiling
         try {
             \Maleficarum\Ioc\Container::retrieveShare('Maleficarum\Profiler\Time')->end();
@@ -77,7 +77,7 @@ class Bootstrap {
 
         // output any response data
         try {
-            \Maleficarum\Ioc\Container::retrieveShare('Maleficarum\Response')->output();
+            $response->output();
         } catch (\RuntimeException $e) {
         }
 
