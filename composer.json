@@ -11,11 +11,18 @@
         "maleficarum/request": "^6.0",
         "maleficarum/http-response": "^6.0",
         "maleficarum/handler": "^4.0",
-        "maleficarum/data": "^2.0|^3.0|^4.0"
+        "maleficarum/data": "^2.0|^3.0|^4.0",
+        "maleficarum/contexttracker": "dev-master"
     },
     "autoload": {
         "psr-4": {
             "Maleficarum\\Api\\": "src/Api/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:pharaun13/maleficarum-context-tracker.git"
+        }
+    ]
 }
