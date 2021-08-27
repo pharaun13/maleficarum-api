@@ -18,11 +18,5 @@
         "psr-4": {
             "Maleficarum\\Api\\": "src/Api/"
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:pharaun13/maleficarum-context-tracker.git"
-        }
-    ]
+    }
 }
