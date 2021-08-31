@@ -18,7 +18,7 @@ class Bootstrap {
     const INITIALIZER_ROUTES = ['Maleficarum\Api\Basic\Initializer', 'setUpRoutes'];
     const INITIALIZER_CONTROLLER = ['Maleficarum\Api\Basic\Initializer', 'setUpController'];
     const INITIALIZER_DEBUG_LEVEL = ['Maleficarum\Api\Basic\Initializer', 'setUpDebugLevel'];
-    const INITIALIZER_CONTEXT_TRACKER = [\Maleficarum\ContextTracing\Initializer\HttpInitializer::class, 'initialize'];
+    const INITIALIZER_CONTEXT_TRACKER = [\Maleficarum\ContextTracing\Initializer\MaleficarumHttpInitializer::class, 'initialize'];
 
     /* ------------------------------------ Class Constant END ----------------------------------------- */
 
