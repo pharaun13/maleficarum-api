@@ -91,7 +91,7 @@ class Bootstrap {
      * @return array
      */
     protected function getInitializers(): array {
-        return array_merge([self::INITIALIZER_CONTEXT_TRACKER], $this->initializers);
+        return array_merge($this->initializers, [self::INITIALIZER_CONTEXT_TRACKER]);
     }
 
     /**
