@@ -1,6 +1,11 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [14.2.0] - 2021-09-01
+### Added
+- Automatic context tracking receiver
+- Dependency to context tracking library 
+
 ## [14.1.1] - 2021-02-04
 ### Changed
 - Allow for uat-* environments
