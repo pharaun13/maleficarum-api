@@ -49,8 +49,10 @@ class Initializer {
             return __METHOD__;
         }
 
+        \preg_match('/^production|development|sandbox|staging|uat|local/', $environment, $matches);
+
         // set handler debug level and error display value based on env
-        switch ($environment) {
+        switch (\reset($matches)) {
             case 'local':
             case 'development':
             case 'staging':
