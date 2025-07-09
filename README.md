@@ -1,6 +1,10 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
+## [15.0.0] - 2025-07-09
+### Changed
+- Improve environment matching
+
 ## [14.1.1] - 2021-02-04
 ### Changed
 - Allow for uat-* environments
