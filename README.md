@@ -1,7 +1,7 @@
 # Change Log
 This is the Maleficarum API component implementation. 
 
-## [15.1.0] - 2025-25-08
+## [15.1.0] - 2025-08-25
 ### Changed
 - Updated to depend on and work with Maleficarum\Request 6.1.X
 
